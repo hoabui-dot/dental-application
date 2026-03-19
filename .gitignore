@@ -66,6 +66,8 @@ lcov.info
 /out/
 /build
 dental-frontend/.next/
+dental-frontend/.next
+dental-frontend/.next/cache/*
 dental-frontend/out/
 dental-frontend/build/
 
