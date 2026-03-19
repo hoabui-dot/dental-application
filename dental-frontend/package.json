@@ -1,0 +1,39 @@
+{
+  "name": "dental-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS='--no-deprecation' next dev",
+    "build": "cross-env NODE_OPTIONS='--no-deprecation' next build",
+    "start": "cross-env NODE_OPTIONS='--no-deprecation' next start",
+    "lint": "eslint",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose --env-file .env.docker up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:clean": "docker-compose down -v",
+    "docker:prod:build": "docker-compose build --no-cache",
+    "docker:prod:up": "docker-compose up -d",
+    "docker:prod:down": "docker-compose down",
+    "strapi:dev": "cd strapi-cms && npm run develop",
+    "strapi:build": "cd strapi-cms && npm run build",
+    "strapi:start": "cd strapi-cms && npm start"
+  },
+  "dependencies": {
+    "next": "15.4.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
