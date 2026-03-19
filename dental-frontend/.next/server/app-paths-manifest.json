@@ -1,6 +1,0 @@
-{
-  "/api/preview/route": "app/api/preview/route.js",
-  "/api/exit-preview/route": "app/api/exit-preview/route.js",
-  "/[slug]/page": "app/[slug]/page.js",
-  "/page": "app/page.js"
-}
