@@ -1,0 +1,112 @@
+# ============================================
+# Docker Compose Production Override
+# ============================================
+#
+# This file extends docker-compose.yml for production
+#
+# Usage:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Production optimizations:
+# - No port exposure for postgres (internal only)
+# - Resource limits
+# - Logging configuration
+# - Security hardening
+# ============================================
+
+version: "3.8"
+
+services:
+  # ============================================
+  # PostgreSQL - Production Configuration
+  # ============================================
+  postgres:
+    # Don't expose postgres port to host in production
+    # Only accessible within Docker network
+    ports: []
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================
+  # Strapi - Production Configuration
+  # ============================================
+  strapi:
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1.5G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+      # Restart policy
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+
+  # ============================================
+  # Frontend - Production Configuration
+  # ============================================
+  frontend:
+    # Build with production target
+    build:
+      args:
+        NODE_ENV: production
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "1"
+          memory: 1G
+
+      # Restart policy
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true
