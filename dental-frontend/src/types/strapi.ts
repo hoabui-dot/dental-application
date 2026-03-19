@@ -1,6 +1,6 @@
 /**
  * Strapi TypeScript Types
- * 
+ *
  * Type definitions for Strapi API responses and frontend data structures.
  */
 
@@ -9,43 +9,43 @@
 // ============================================================================
 
 export interface StrapiResponse<T> {
-  data: T
+  data: T;
   meta?: {
     pagination?: {
-      page: number
-      pageSize: number
-      pageCount: number
-      total: number
-    }
-  }
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
 }
 
 export interface StrapiEntity<T> {
-  id: number
-  attributes: T
+  id: number;
+  attributes: T;
 }
 
 export interface StrapiMedia {
   data: {
-    id: number
+    id: number;
     attributes: {
-      name: string
-      alternativeText: string | null
-      caption: string | null
-      width: number
-      height: number
-      formats: any
-      hash: string
-      ext: string
-      mime: string
-      size: number
-      url: string
-      previewUrl: string | null
-      provider: string
-      createdAt: string
-      updatedAt: string
-    }
-  } | null
+      name: string;
+      alternativeText: string | null;
+      caption: string | null;
+      width: number;
+      height: number;
+      formats: any;
+      hash: string;
+      ext: string;
+      mime: string;
+      size: number;
+      url: string;
+      previewUrl: string | null;
+      provider: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  } | null;
 }
 
 // ============================================================================
@@ -53,99 +53,107 @@ export interface StrapiMedia {
 // ============================================================================
 
 export interface PageAttributes {
-  title: string
-  slug: string
-  metaTitle: string | null
-  metaDescription: string | null
-  layout: BlockComponent[]
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
+  title: string;
+  slug: string;
+  content?: string; // Rich text content field
+  cover?: StrapiMedia; // Cover image
+  description?: string; // Text description
+  publishDate?: string; // Publish date
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  layout?: BlockComponent[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string;
 }
 
-export type BlockComponent = HeroComponent | ServicesComponent | CTAComponent
+export type BlockComponent = HeroComponent | ServicesComponent | CTAComponent;
 
 export interface HeroComponent {
-  __component: 'blocks.hero'
-  id: number
-  heading: string
-  subheading: string | null
-  image: StrapiMedia
+  __component: "blocks.hero";
+  id: number;
+  heading: string;
+  subheading: string | null;
+  image: StrapiMedia;
 }
 
 export interface ServicesComponent {
-  __component: 'blocks.services'
-  id: number
-  heading: string
-  items: ServiceItem[]
+  __component: "blocks.services";
+  id: number;
+  heading: string;
+  items: ServiceItem[];
 }
 
 export interface ServiceItem {
-  id: number
-  title: string
-  description: string
-  image: StrapiMedia
+  id: number;
+  title: string;
+  description: string;
+  image: StrapiMedia;
 }
 
 export interface CTAComponent {
-  __component: 'blocks.cta'
-  id: number
-  text: string
-  buttonLabel: string
-  link: string
+  __component: "blocks.cta";
+  id: number;
+  text: string;
+  buttonLabel: string;
+  link: string;
 }
 
 // ============================================================================
 // Strapi API Response Types (Typed)
 // ============================================================================
 
-export type StrapiPage = StrapiResponse<StrapiEntity<PageAttributes>>
-export type StrapiPages = StrapiResponse<StrapiEntity<PageAttributes>[]>
+export type StrapiPage = StrapiResponse<StrapiEntity<PageAttributes>>;
+export type StrapiPages = StrapiResponse<StrapiEntity<PageAttributes>[]>;
 
 // ============================================================================
 // Frontend Types (Transformed)
 // ============================================================================
 
 export interface Page {
-  id: number
-  title: string
-  slug: string
+  id: number;
+  title: string;
+  slug: string;
+  content?: string; // Rich text content field
+  cover?: Media; // Cover image
+  description?: string; // Text description
+  publishDate?: string; // Publish date
   seo: {
-    metaTitle: string
-    metaDescription: string
-  }
-  layout: Block[]
+    metaTitle: string;
+    metaDescription: string;
+  };
+  layout: Block[];
 }
 
-export type Block = HeroBlock | ServicesBlock | CTABlock
+export type Block = HeroBlock | ServicesBlock | CTABlock;
 
 export interface HeroBlock {
-  blockType: 'hero'
-  heading: string
-  subheading?: string
-  image?: Media
+  blockType: "hero";
+  heading: string;
+  subheading?: string;
+  image?: Media;
 }
 
 export interface ServicesBlock {
-  blockType: 'services'
-  heading: string
+  blockType: "services";
+  heading: string;
   items: {
-    title: string
-    description: string
-    image?: Media
-  }[]
+    title: string;
+    description: string;
+    image?: Media;
+  }[];
 }
 
 export interface CTABlock {
-  blockType: 'cta'
-  text: string
-  buttonLabel: string
-  link: string
+  blockType: "cta";
+  text: string;
+  buttonLabel: string;
+  link: string;
 }
 
 export interface Media {
-  url: string
-  alt: string
-  width: number
-  height: number
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
 }

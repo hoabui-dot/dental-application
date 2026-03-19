@@ -34,7 +34,7 @@ export function BlockRenderer({ layout }: BlockRendererProps) {
     return (
       <EmptyState
         title="No content blocks"
-        description="This page doesn't have any content blocks yet. Add some blocks in the Strapi admin panel."
+        description="This page doesn't have any content blocks yet. Add some blocks in the CMS."
       />
     )
   }

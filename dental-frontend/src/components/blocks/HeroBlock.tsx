@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getMediaUrl, getMediaAlt } from '@/src/lib/strapi/queries'
+import { getMediaUrl, getMediaAlt } from '@/src/lib/api/queries'
 import type { Page } from '@/src/types/strapi'
 
 /**
@@ -22,17 +22,17 @@ export function HeroBlock({ data }: HeroBlockProps) {
   const imageAlt = getMediaAlt(data.image, data.heading)
 
   return (
-    <section className="hero-block relative w-full bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-black">
+    <section className="hero-block relative w-full bg-background">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Text Content */}
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               {data.heading}
             </h1>
             
             {data.subheading && (
-              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg md:text-xl text-foreground-secondary leading-relaxed">
                 {data.subheading}
               </p>
             )}
@@ -40,7 +40,7 @@ export function HeroBlock({ data }: HeroBlockProps) {
 
           {/* Hero Image */}
           {imageUrl && (
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src={imageUrl}
                 alt={imageAlt}

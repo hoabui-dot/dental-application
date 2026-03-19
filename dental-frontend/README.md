@@ -14,6 +14,7 @@ Next.js 15 frontend application for the dental landing pages system. Consumes co
 
 - ✅ **Server-Side Rendering** - Fast initial page loads
 - ✅ **ISR (Incremental Static Regeneration)** - 60s revalidation
+- ✅ **Preview Mode** - Preview draft content before publishing
 - ✅ **Block-Based Rendering** - Dynamic content blocks
 - ✅ **SEO Optimized** - Meta tags, OpenGraph, Twitter cards
 - ✅ **Image Optimization** - Next.js Image component
@@ -47,6 +48,7 @@ Edit `.env.local`:
 STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=your-api-token-from-strapi
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+NEXT_PREVIEW_SECRET=your-secure-preview-secret-change-in-production
 ```
 
 3. **Start development server:**
@@ -113,6 +115,32 @@ dental-frontend/
 ```
 
 ## 🔌 Strapi Integration
+
+### Preview Mode
+
+The application supports previewing draft content from Strapi before publishing.
+
+**Quick Setup:**
+
+1. Add preview secret to `.env`:
+```env
+NEXT_PREVIEW_SECRET=your-secure-preview-secret
+```
+
+2. Configure Strapi preview URL:
+```
+http://localhost:3000/api/preview?slug={slug}&secret=your-secure-preview-secret
+```
+
+3. Test:
+   - Create draft page in Strapi
+   - Click "Preview" button
+   - See draft content with yellow banner
+
+**Documentation:**
+- Complete guide: `docs/PREVIEW_MODE_SETUP.md`
+- Quick reference: `docs/PREVIEW_QUICK_REFERENCE.md`
+- Flow diagrams: `docs/PREVIEW_FLOW_DIAGRAM.md`
 
 ### API Client
 
@@ -385,6 +413,11 @@ npm start
 
 - **ARCHITECTURE.md** - System architecture overview
 - **DOCUMENTATION.md** - Documentation index
+- **docs/PREVIEW_MODE_SETUP.md** - Complete preview mode setup guide
+- **docs/PREVIEW_QUICK_REFERENCE.md** - Quick reference for preview mode
+- **docs/PREVIEW_FLOW_DIAGRAM.md** - Visual flow diagrams
+- **docs/DESIGN_SYSTEM.md** - Design system documentation
+- **docs/STRAPI_CONTENT_GUIDE.md** - CMS usage guide for editors
 - **src/components/blocks/README.md** - Block system details
 
 ## 🆘 Support

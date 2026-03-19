@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getMediaUrl, getMediaAlt } from '@/src/lib/strapi/queries'
+import { getMediaUrl, getMediaAlt } from '@/src/lib/api/queries'
 import type { Page } from '@/src/types/strapi'
 
 /**
@@ -23,12 +23,12 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
   }
 
   return (
-    <section className="services-block w-full bg-white dark:bg-black py-16 md:py-24">
+    <section className="services-block w-full bg-background-secondary py-16 md:py-24">
       <div className="container mx-auto px-4">
         {/* Section Heading */}
         {data.heading && (
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               {data.heading}
             </h2>
           </div>
@@ -43,7 +43,7 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
             return (
               <div
                 key={index}
-                className="service-card group bg-gray-50 dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="service-card group bg-background rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-border"
               >
                 {/* Service Image */}
                 {imageUrl && (
@@ -60,11 +60,11 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
 
                 {/* Service Content */}
                 <div className="p-6 space-y-3">
-                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-2xl font-semibold text-foreground">
                     {service.title}
                   </h3>
                   
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p className="text-foreground-secondary leading-relaxed">
                     {service.description}
                   </p>
                 </div>

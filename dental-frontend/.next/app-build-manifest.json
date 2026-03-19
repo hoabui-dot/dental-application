@@ -1,25 +1,35 @@
 {
   "pages": {
-    "/(frontend)/layout": [
+    "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(frontend)/layout.css",
-      "static/chunks/app/(frontend)/layout.js"
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
-    "/(frontend)/not-found": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(frontend)/not-found.js"
+      "static/chunks/app/not-found.js"
     ],
-    "/(frontend)/page": [
+    "/[slug]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(frontend)/page.js"
+      "static/chunks/app/[slug]/page.js"
     ],
-    "/(frontend)/[slug]/page": [
+    "/api/preview/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(frontend)/[slug]/page.js"
+      "static/chunks/app/api/preview/route.js"
+    ],
+    "/api/exit-preview/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/exit-preview/route.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
     ]
   }
 }

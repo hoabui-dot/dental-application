@@ -65,9 +65,13 @@ lcov.info
 /.next/
 /out/
 /build
+dental-frontend/.next/
+dental-frontend/out/
+dental-frontend/build/
 
 # Testing
 /coverage
+dental-frontend/coverage/
 
 # TypeScript
 *.tsbuildinfo
@@ -88,9 +92,14 @@ dist/
 build/
 exports/
 license.txt
+strapi-cms/.strapi/
+strapi-cms/dist/
+strapi-cms/build/
+strapi-cms/exports/
 
 # Uploads (keep .gitkeep)
 public/uploads/*
+strapi-cms/public/uploads/*
 !public/uploads/.gitkeep
 
 # ============================================
@@ -102,7 +111,19 @@ public/uploads/*
 .env.development
 .env.test
 .env.production
+.env.docker
 .env*
+dental-frontend/.env
+dental-frontend/.env.local
+dental-frontend/.env.production
+dental-frontend/.env.docker
+strapi-cms/.env
+strapi-cms/.env.local
+
+# Keep example files
+!.env.example
+!dental-frontend/.env.example
+!strapi-cms/.env.example
 
 # ============================================
 # IDEs and Editors
@@ -114,6 +135,8 @@ public/uploads/*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+dental-frontend/.vscode/*
+strapi-cms/.vscode/*
 
 # IntelliJ IDEA
 .idea/
@@ -147,6 +170,7 @@ nbproject/
 *.sqlite
 *.sqlite3
 .tmp
+strapi-cms/.tmp/
 
 # ============================================
 # Archives and Binaries
@@ -173,12 +197,39 @@ nbproject/
 *.pid
 
 # ============================================
+# Documentation (generated)
+# ============================================
+
+# Keep documentation but ignore generated summaries
+*_SUMMARY.md
+*_REPORT.md
+*_FIX.md
+*_SOLUTION.md
+*_COMPLETE.md
+*_NOW.md
+*_GUIDE.md
+FIXED_*.md
+FIX_*.md
+FINAL_*.md
+PREVIEW_*.md
+QUICK_*.md
+RESTART_*.md
+SOLUTION_*.md
+TEST_*.md
+TROUBLESHOOT_*.md
+
+# ============================================
 # Misc
 # ============================================
 
 *#
 ssl/
 *.pem
+
+# Temporary folders
+dental-frontend/env-prod/
+tmp/
+temp/
 
 # ============================================
 # Docker (local overrides only)
