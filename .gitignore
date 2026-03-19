@@ -65,11 +65,10 @@ lcov.info
 /.next/
 /out/
 /build
-dental-frontend/.next/
-dental-frontend/.next
-dental-frontend/.next/cache/*
-dental-frontend/out/
-dental-frontend/build/
+/dental-frontend/.next/
+/dental-frontend/.next
+/dental-frontend/out/
+/dental-frontend/build/
 
 # Testing
 /coverage
