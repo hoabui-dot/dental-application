@@ -36,9 +36,13 @@ export function transformPage(strapiPage: StrapiPage): Page {
     title: attributes.title || "",
     slug: attributes.slug || "",
     content: attributes.content || undefined,
+    cover: attributes.cover ? transformMedia(attributes.cover) : undefined,
+    description: attributes.description || undefined,
+    publishDate: attributes.publishDate || undefined,
     seo: {
       metaTitle: attributes.metaTitle || attributes.title || "",
-      metaDescription: attributes.metaDescription || "",
+      metaDescription:
+        attributes.metaDescription || attributes.description || "",
     },
     layout: attributes.layout?.map(transformBlock) || [],
   };

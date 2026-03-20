@@ -33,6 +33,7 @@ export async function getPageBySlug(
         populate: "*",
       },
       isDraftMode,
+      tags: ["pages", "page"], // Cache tags for revalidation
     });
 
     // API returns array even for single result
@@ -59,16 +60,20 @@ export async function getPageBySlug(
  *
  * Used for static generation (generateStaticParams).
  * Only fetches slug field for performance.
+ * Only fetches published pages for production builds.
  *
  * @returns Array of page slugs
  */
 export async function getAllPageSlugs(): Promise<string[]> {
   try {
     // Only fetch slug field for performance
+    // Only fetch published pages (not drafts) - Strapi v5 uses status=published
     const response = await apiClient<StrapiPages>("/api/pages", {
       params: {
         "fields[0]": "slug",
+        status: "published", // Strapi v5: Only published pages for static generation
       },
+      tags: ["pages"], // Cache tag for revalidation
     });
 
     if (!response.data || response.data.length === 0) {
@@ -108,6 +113,7 @@ export async function getAllPages(limit: number = 10): Promise<Page[]> {
         populate: "*",
         sort: "createdAt:desc", // Newest first
       },
+      tags: ["pages"], // Cache tag for revalidation
     });
 
     if (!response.data || response.data.length === 0) {

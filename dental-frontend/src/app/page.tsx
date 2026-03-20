@@ -98,5 +98,5 @@ export default async function Home() {
   )
 }
 
-// Revalidate every 60 seconds
-export const revalidate = 60
+// On-demand revalidation via webhooks (no time-based revalidation)
+export const revalidate = false

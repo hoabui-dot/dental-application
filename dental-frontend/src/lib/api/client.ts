@@ -6,6 +6,8 @@
  * Supports draft mode for preview functionality.
  */
 
+import { unstable_noStore as noStore } from "next/cache";
+
 const API_URL = process.env.STRAPI_URL || "http://localhost:1337";
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
 
@@ -23,6 +25,7 @@ if (API_TOKEN) {
 interface FetchOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;
   isDraftMode?: boolean;
+  tags?: string[]; // Cache tags for revalidation
 }
 
 /**
@@ -36,7 +39,12 @@ export async function apiClient<T = unknown>(
   endpoint: string,
   options: FetchOptions = {},
 ): Promise<T> {
-  const { params, isDraftMode, ...fetchOptions } = options;
+  const { params, isDraftMode, tags, ...fetchOptions } = options;
+
+  // CRITICAL: Opt out of caching for draft mode
+  if (isDraftMode) {
+    noStore();
+  }
 
   // Build URL with query parameters
   const url = new URL(endpoint, API_URL);
@@ -46,11 +54,15 @@ export async function apiClient<T = unknown>(
     });
   }
 
-  // Add draft mode parameter for Strapi
+  // Add draft mode parameter for Strapi v5
+  // Strapi v5 uses 'status' parameter instead of 'publicationState'
   if (isDraftMode) {
-    url.searchParams.append("publicationState", "preview");
+    url.searchParams.append("status", "draft");
     // Add timestamp to bust cache
     url.searchParams.append("_t", Date.now().toString());
+  } else {
+    // Explicitly request published content only
+    url.searchParams.append("status", "published");
   }
 
   // Set default headers
@@ -74,16 +86,26 @@ export async function apiClient<T = unknown>(
   console.log(
     `[API Client] ${isDraftMode ? "DRAFT" : "PUBLISHED"} request to: ${url.toString()}`,
   );
+  console.log(
+    `[API Client] Status parameter: ${isDraftMode ? "draft" : "published"}`,
+  );
+  if (tags && tags.length > 0) {
+    console.log(`[API Client] Cache tags:`, tags);
+  }
 
   try {
     const response = await fetch(url.toString(), {
       ...fetchOptions,
       headers,
-      cache: isDraftMode ? "no-store" : "default", // Disable cache in draft mode
-      next: {
-        revalidate: isDraftMode ? 0 : 60, // No revalidation in draft mode
-        ...fetchOptions.next,
-      },
+      // For draft mode: no-store, for published: force-cache with revalidation
+      cache: isDraftMode ? "no-store" : "force-cache",
+      next: isDraftMode
+        ? undefined
+        : {
+            tags: tags || [], // Cache tags for on-demand revalidation
+            revalidate: false, // Disable time-based, use webhook-based revalidation
+            ...fetchOptions.next,
+          },
     });
 
     if (!response.ok) {

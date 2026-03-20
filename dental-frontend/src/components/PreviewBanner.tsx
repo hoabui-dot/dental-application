@@ -6,24 +6,24 @@
  */
 
 import Link from 'next/link'
+import { Button } from '@/src/components/ui/button'
 
 export function PreviewBanner() {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-yellow-500 text-black px-4 py-3 shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-warning-500 text-warning-foreground px-4 py-3 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-2xl">👁️</span>
           <div>
             <p className="font-bold">Preview Mode Enabled</p>
-            <p className="text-sm">You are viewing draft content</p>
+            <p className="text-sm opacity-90">You are viewing draft content</p>
           </div>
         </div>
-        <Link
-          href="/api/exit-preview"
-          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold"
-        >
-          Exit Preview
-        </Link>
+        <Button asChild variant="outline" size="sm" className="bg-background text-foreground hover:bg-background-secondary">
+          <Link href="/api/exit-preview">
+            Exit Preview
+          </Link>
+        </Button>
       </div>
     </div>
   )

@@ -113,9 +113,19 @@ export default async function LandingPage({ params }: PageProps) {
     // Check if draft mode is enabled
     const { isEnabled: isDraftMode } = await draftMode()
     
+    // Log draft mode status for debugging
+    console.log(`[Page] Draft mode: ${isDraftMode}`)
+    
     // Fetch page data from CMS
     const { slug } = await params
     const page = await getPageBySlug(slug, isDraftMode)
+
+    // Log page data for debugging
+    console.log(`[Page] Fetched page: ${page?.title || 'null'}`)
+    if (isDraftMode && page) {
+      console.log(`[Page] Preview content - Title: ${page.title}`)
+      console.log(`[Page] Preview content - Description: ${page.description?.substring(0, 50) || 'none'}`)
+    }
 
     // Handle page not found
     if (!page) {
@@ -207,13 +217,19 @@ export default async function LandingPage({ params }: PageProps) {
 /**
  * Revalidation Configuration
  * 
- * ISR (Incremental Static Regeneration):
- * - Pages are statically generated at build time
- * - Revalidated every 60 seconds
- * - Stale content served while revalidating in background
- * - Perfect balance between performance and freshness
+ * On-Demand Revalidation:
+ * - No time-based revalidation (revalidate = false)
+ * - Cache invalidated via Strapi webhooks
+ * - Real-time content updates
+ * - Enterprise-grade cache management
+ * 
+ * Cache tags are used for granular revalidation:
+ * - 'pages' tag: Revalidates all page queries
+ * - 'page' tag: Revalidates specific page queries
+ * 
+ * Webhook triggers revalidation immediately when content changes.
  */
-export const revalidate = 60 // Revalidate every 60 seconds
+export const revalidate = false // Disable time-based, use webhook-based revalidation
 
 /**
  * Dynamic Params Configuration
