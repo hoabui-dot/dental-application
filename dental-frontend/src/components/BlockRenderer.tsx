@@ -11,6 +11,7 @@ import { PricingSection } from './blocks/PricingSection'
 import { ProcessSection } from './blocks/ProcessSection'
 import { DoctorSection } from './blocks/DoctorSection'
 import { FAQSection } from './blocks/FAQSection'
+import BlogCollectionSection from './blocks/BlogCollectionSection'
 import { EmptyState } from './EmptyState'
 
 /**
@@ -98,6 +99,9 @@ export function BlockRenderer({ layout }: BlockRendererProps) {
 
             case 'faq':
               return <FAQSection key={`faq-${blockId}`} data={block as any} />
+
+            case 'blog-collection-section':
+              return <BlogCollectionSection key={`blog-${blockId}`} {...(block as any)} />
 
             default:
               // Handle unknown block types gracefully

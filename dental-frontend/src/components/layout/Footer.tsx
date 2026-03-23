@@ -35,7 +35,7 @@ export async function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="font-semibold text-xl">Nha Khoa Quốc Tế</span>
+              <span className="font-semibold text-xl">International Dental Clinic</span>
             </div>
             {footer.description ? (
               <p className="text-black mb-6">
@@ -98,31 +98,31 @@ export async function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-bold text-xl mb-6">Liên kết nhanh</h3>
+            <h3 className="font-bold text-xl mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/" className="text-black hover:text-sky-600 transition-colors">
-                  Trang chủ
+                  Home page
                 </Link>
               </li>
               <li>
                 <Link href="/services" className="text-black hover:text-sky-600 transition-colors">
-                  Dịch vụ
+                  Services
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-black hover:text-sky-600 transition-colors">
-                  Về chúng tôi
+                  About us
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="text-black hover:text-sky-600 transition-colors">
-                  Bảng giá
+                  Pricing
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-black hover:text-sky-600 transition-colors">
-                  Liên hệ
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -130,7 +130,7 @@ export async function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-bold text-xl mb-6">Dịch vụ</h3>
+            <h3 className="font-bold text-xl mb-6">Services</h3>
             <ul className="space-y-3">
               {footer.links.length > 0 ? (
                 footer.links.slice(0, 5).map((link) => (
@@ -174,7 +174,7 @@ export async function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-bold text-xl mb-6">Liên hệ</h3>
+            <h3 className="font-bold text-xl mb-6">Contact</h3>
             <ul className="space-y-4">
               {footer.contactInfo.address && (
                 <li className="flex items-start gap-3">
@@ -209,9 +209,9 @@ export async function Footer() {
               )}
             </ul>
             <div className="mt-6 bg-sky-100 rounded-xl p-4">
-              <p className="text-sm text-black font-semibold mb-2">Giờ làm việc</p>
-              <p className="text-sm text-black">Thứ 2 - Thứ 6: 8:00 - 18:00</p>
-              <p className="text-sm text-black">Thứ 7: 9:00 - 15:00</p>
+              <p className="text-sm text-black font-semibold mb-2">🕒 Working Hours</p>
+              <p className="text-sm text-black">Monday – Friday: 8:00 - 18:00</p>
+              <p className="text-sm text-black">Saturday: 9:00 - 15:00</p>
             </div>
           </div>
         </div>
@@ -220,17 +220,17 @@ export async function Footer() {
         <div className="border-t border-gray-300 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-black text-sm">
-              © {new Date().getFullYear()} Nha Khoa Quốc Tế. All rights reserved.
+              © {new Date().getFullYear()} International Dental Clinic. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <Link href="/privacy" className="text-black hover:text-sky-600 transition-colors">
-                Chính sách bảo mật
+                Privacy Policy
               </Link>
               <Link href="/terms" className="text-black hover:text-sky-600 transition-colors">
-                Điều khoản dịch vụ
+                Terms of Service
               </Link>
               <Link href="/hipaa" className="text-black hover:text-sky-600 transition-colors">
-                Tuân thủ HIPAA
+                HIPAA Compliance
               </Link>
             </div>
           </div>

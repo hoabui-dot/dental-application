@@ -53,7 +53,7 @@ export function Header({ navigation }: HeaderProps) {
                 className="h-10 w-auto"
               />
             ) : (
-              <span>Nha Khoa Quốc Tế</span>
+              <span>International Dental Clinic</span>
             )}
           </Link>
 

@@ -17,3 +17,4 @@ export { PricingSection } from "./PricingSection";
 export { ProcessSection } from "./ProcessSection";
 export { DoctorSection } from "./DoctorSection";
 export { FAQSection } from "./FAQSection";
+export { default as BlogCollectionSection } from "./BlogCollectionSection";

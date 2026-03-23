@@ -29,6 +29,7 @@ import type {
   HomepageProcessComponent,
   HomepageDoctorComponent,
   HomepageFAQComponent,
+  HomepageBlogCollectionComponent,
   HomepageBlock,
 } from "@/src/types/strapi";
 
@@ -670,6 +671,20 @@ export async function getHomepage(): Promise<Homepage> {
               title: (block as HomepageFAQComponent).title,
               subtitle: (block as HomepageFAQComponent).subtitle,
               questions: (block as HomepageFAQComponent).questions || [],
+            };
+
+          case "blog-collection-section":
+            return {
+              blockType: "blog-collection-section" as const,
+              id: block.id,
+              title: (block as HomepageBlogCollectionComponent).title,
+              subtitle: (block as HomepageBlogCollectionComponent).subtitle,
+              posts: (block as HomepageBlogCollectionComponent).posts || [],
+              layout:
+                (block as HomepageBlogCollectionComponent).layout || "grid_3",
+              showFeatured: (block as HomepageBlogCollectionComponent)
+                .showFeatured,
+              isActive: (block as HomepageBlogCollectionComponent).isActive,
             };
 
           default:

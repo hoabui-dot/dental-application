@@ -103,8 +103,11 @@ export function MarkdownContent({ content, className = '' }: MarkdownContentProp
             </blockquote>
           ),
           // Customize code styles
-          code: ({ inline, children }) => {
-            if (inline) {
+          code: ({ children, className }) => {
+            // Check if it's inline code (no language class)
+            const isInline = !className || !className.startsWith('language-');
+            
+            if (isInline) {
               return (
                 <code className="bg-gray-100 text-sky-600 px-1.5 py-0.5 rounded text-sm font-mono">
                   {children}

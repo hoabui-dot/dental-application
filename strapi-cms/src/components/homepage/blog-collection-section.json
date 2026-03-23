@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_homepage_blog_collection_sections",
+  "info": {
+    "displayName": "BlogCollectionSection",
+    "description": "Blog collection grid section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog.blog"
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["grid_2", "grid_3", "grid_4"],
+      "default": "grid_3"
+    },
+    "showFeatured": {
+      "type": "boolean",
+      "default": false
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

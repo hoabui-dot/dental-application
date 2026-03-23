@@ -281,7 +281,8 @@ export type HomepageBlockComponent =
   | HomepageAboutComponent
   | HomepageTestimonialsComponent
   | HomepageFAQComponent
-  | HomepageCTAComponent;
+  | HomepageCTAComponent
+  | HomepageBlogCollectionComponent;
 
 export interface HomepageVideoHeroComponent {
   __component: "homepage.video-hero";
@@ -349,6 +350,17 @@ export interface HomepageCTAComponent {
   text: string;
   button_label: string;
   button_link: string;
+}
+
+export interface HomepageBlogCollectionComponent {
+  __component: "homepage.blog-collection-section";
+  id: number;
+  title: string;
+  subtitle?: string;
+  posts: any;
+  layout?: "grid_2" | "grid_3" | "grid_4";
+  showFeatured?: boolean;
+  isActive?: boolean;
 }
 
 export interface HomepageTrustComponent {
@@ -466,7 +478,8 @@ export type HomepageBlock =
   | HomepageAboutBlock
   | HomepageTestimonialsBlock
   | HomepageFAQBlock
-  | HomepageCTABlock;
+  | HomepageCTABlock
+  | HomepageBlogCollectionBlock;
 
 export interface HomepageVideoHeroBlock {
   blockType: "video-hero";
@@ -626,4 +639,24 @@ export interface HomepageFAQBlock {
     question: string;
     answer: string;
   }>;
+}
+
+export interface HomepageBlogCollectionBlock {
+  blockType: "blog-collection-section";
+  id: number;
+  title: string;
+  subtitle?: string;
+  posts: Array<{
+    id: number;
+    attributes: {
+      title: string;
+      slug: string;
+      excerpt?: string;
+      coverImage?: StrapiMedia;
+      publishedAt: string;
+    };
+  }>;
+  layout?: "grid_2" | "grid_3" | "grid_4";
+  showFeatured?: boolean;
+  isActive?: boolean;
 }
