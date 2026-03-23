@@ -43,12 +43,47 @@ const MODEL_PATH_MAP: Record<string, string[]> = {
 
 interface WebhookPayload {
   event: string;
-  model: string;
+  model?: string;
   entry?: {
     id: number;
     slug?: string;
     [key: string]: unknown;
   };
+  // Strapi v4 payload structure
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Extract model name from Strapi webhook payload
+ * Strapi sends model in format: "api::page.page" or just "page"
+ */
+function extractModelName(payload: WebhookPayload): string | null {
+  // Try direct model field
+  if (payload.model) {
+    // Extract from "api::page.page" format
+    const match = payload.model.match(/api::([^.]+)\./);
+    return match ? match[1] : payload.model;
+  }
+
+  // Try to extract from event name (e.g., "entry.create")
+  if (payload.event) {
+    const eventParts = payload.event.split(".");
+    if (eventParts.length > 0) {
+      return eventParts[0];
+    }
+  }
+
+  // Check if entry has __type or similar field
+  if (payload.entry && typeof payload.entry === "object") {
+    const entry = payload.entry as Record<string, unknown>;
+    if (entry.__type) {
+      return String(entry.__type);
+    }
+  }
+
+  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -70,25 +105,54 @@ export async function POST(request: NextRequest) {
     // 2. Parse webhook payload
     const payload: WebhookPayload = await request.json();
 
+    // Log the full payload for debugging
+    console.log(
+      "[Revalidate API] Full webhook payload:",
+      JSON.stringify(payload, null, 2),
+    );
+
+    // 3. Extract model name
+    const modelName = extractModelName(payload);
+
     console.log("[Revalidate API] Webhook received:", {
       event: payload.event,
       model: payload.model,
+      extractedModel: modelName,
       entryId: payload.entry?.id,
       slug: payload.entry?.slug,
       timestamp: new Date().toISOString(),
     });
 
-    // 3. Validate payload
-    if (!payload.model) {
-      console.error("[Revalidate API] Invalid payload - missing model");
-      return NextResponse.json(
-        { error: "Invalid payload - model is required" },
-        { status: 400 },
+    // 4. If we can't determine the model, revalidate everything
+    if (!modelName) {
+      console.warn(
+        "[Revalidate API] Could not determine model, revalidating all",
       );
+
+      // Revalidate common paths
+      const commonPaths = ["/"];
+      for (const path of commonPaths) {
+        try {
+          revalidatePath(path);
+          console.log(`[Revalidate API] Revalidated path: ${path}`);
+        } catch (error) {
+          console.error(
+            `[Revalidate API] Error revalidating path ${path}:`,
+            error,
+          );
+        }
+      }
+
+      return NextResponse.json({
+        revalidated: true,
+        paths: commonPaths,
+        note: "Model could not be determined, revalidated common paths",
+        timestamp: new Date().toISOString(),
+      });
     }
 
-    // 4. Revalidate cache tags
-    const tags = MODEL_TAG_MAP[payload.model] || [payload.model];
+    // 5. Revalidate cache tags
+    const tags = MODEL_TAG_MAP[modelName] || [modelName];
     const revalidatedTags: string[] = [];
 
     for (const tag of tags) {
@@ -101,8 +165,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 5. Revalidate specific paths
-    const paths = MODEL_PATH_MAP[payload.model] || [];
+    // 6. Revalidate specific paths
+    const paths = MODEL_PATH_MAP[modelName] || [];
     const revalidatedPaths: string[] = [];
 
     // Revalidate model-specific paths
@@ -119,7 +183,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 6. Revalidate entry-specific path (if slug exists)
+    // 7. Revalidate entry-specific path (if slug exists)
     if (payload.entry?.slug) {
       const entryPath = `/${payload.entry.slug}`;
       try {
@@ -134,15 +198,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 7. Calculate execution time
+    // 8. Calculate execution time
     const executionTime = Date.now() - startTime;
 
-    // 8. Return success response
+    // 9. Return success response
     const response = {
       revalidated: true,
       tags: revalidatedTags,
       paths: revalidatedPaths,
-      model: payload.model,
+      model: modelName,
       event: payload.event,
       entryId: payload.entry?.id,
       slug: payload.entry?.slug,

@@ -4,6 +4,7 @@ import { draftMode } from 'next/headers'
 import { getPageBySlug, getAllPageSlugs } from '@/src/lib/api/queries'
 import { BlockRenderer } from '@/src/components/BlockRenderer'
 import { PreviewBanner } from '@/src/components/PreviewBanner'
+import { MarkdownContent } from '@/src/components/MarkdownContent'
 import { Suspense } from 'react'
 import { PageSkeleton } from '@/src/components/LoadingSkeleton'
 
@@ -185,9 +186,10 @@ export default async function LandingPage({ params }: PageProps) {
               
               {/* Content */}
               {page.content && (
-                <div className="prose prose-lg max-w-none text-foreground-secondary">
-                  <div dangerouslySetInnerHTML={{ __html: page.content.replace(/\n/g, '<br />') }} />
-                </div>
+                <MarkdownContent 
+                  content={page.content}
+                  className="text-foreground-secondary"
+                />
               )}
             </div>
           )}
