@@ -5,6 +5,22 @@
  */
 
 export default ({ env }) => ({
+  // Upload Plugin Security Configuration
+  upload: {
+    config: {
+      security: {
+        maxFileSize: 10 * 1024 * 1024, // 10MB
+        allowedFileTypes: [
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/webp",
+          "image/svg+xml",
+        ],
+      },
+    },
+  },
+
   // Preview Button Plugin Configuration
   "preview-button": {
     enabled: true,

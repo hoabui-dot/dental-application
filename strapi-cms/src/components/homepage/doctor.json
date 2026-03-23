@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_homepage_doctors",
+  "info": {
+    "displayName": "Doctor Section",
+    "description": "Doctor team showcase"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "doctors": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.doctor-profile"
+    }
+  }
+}

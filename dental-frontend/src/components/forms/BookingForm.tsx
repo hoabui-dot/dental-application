@@ -44,7 +44,7 @@ const bookingFormSchema = z.object({
     message: 'Please enter a valid phone number.',
   }),
   service: z.string({
-    required_error: 'Please select a service.',
+    message: 'Please select a service.',
   }),
   preferredDate: z.string().optional(),
   message: z.string().optional(),

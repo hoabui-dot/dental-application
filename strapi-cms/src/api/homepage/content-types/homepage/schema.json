@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": "Dynamic homepage with flexible layout blocks - 2026 Enhanced"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Homepage"
+    },
+    "layout": {
+      "type": "dynamiczone",
+      "components": [
+        "homepage.video-hero",
+        "homepage.hero",
+        "homepage.trust",
+        "homepage.services",
+        "homepage.before-after",
+        "homepage.pricing",
+        "homepage.process",
+        "homepage.doctor",
+        "homepage.about",
+        "homepage.testimonials",
+        "homepage.faq",
+        "homepage.cta"
+      ]
+    }
+  }
+}

@@ -1,10 +1,19 @@
 /**
  * Block Components Index
  *
- * Centralized exports for all block components.
- * Makes imports cleaner throughout the app.
+ * Central export point for all block components.
+ * Makes imports cleaner throughout the application.
  */
 
+export { VideoHero } from "./VideoHero";
 export { HeroBlock } from "./HeroBlock";
 export { ServicesBlock } from "./ServicesBlock";
 export { CTABlock } from "./CTABlock";
+export { AboutBlock } from "./AboutBlock";
+export { TestimonialsBlock } from "./TestimonialsBlock";
+export { TrustSection } from "./TrustSection";
+export { BeforeAfterSection } from "./BeforeAfterSection";
+export { PricingSection } from "./PricingSection";
+export { ProcessSection } from "./ProcessSection";
+export { DoctorSection } from "./DoctorSection";
+export { FAQSection } from "./FAQSection";

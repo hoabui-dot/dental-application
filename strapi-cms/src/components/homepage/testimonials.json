@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_homepage_testimonials",
+  "info": {
+    "displayName": "Testimonials",
+    "description": "Testimonials section with title and repeatable testimonial items"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.testimonial-item"
+    }
+  }
+}

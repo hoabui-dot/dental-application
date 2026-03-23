@@ -1,7 +1,16 @@
-import type { Page } from '@/src/types/strapi'
+import type { Page, HomepageBlock } from '@/src/types/strapi'
+import { VideoHero } from './blocks/VideoHero'
 import { HeroBlock } from './blocks/HeroBlock'
 import { ServicesBlock } from './blocks/ServicesBlock'
 import { CTABlock } from './blocks/CTABlock'
+import { AboutBlock } from './blocks/AboutBlock'
+import { TestimonialsBlock } from './blocks/TestimonialsBlock'
+import { TrustSection } from './blocks/TrustSection'
+import { BeforeAfterSection } from './blocks/BeforeAfterSection'
+import { PricingSection } from './blocks/PricingSection'
+import { ProcessSection } from './blocks/ProcessSection'
+import { DoctorSection } from './blocks/DoctorSection'
+import { FAQSection } from './blocks/FAQSection'
 import { EmptyState } from './EmptyState'
 
 /**
@@ -25,7 +34,7 @@ import { EmptyState } from './EmptyState'
  */
 
 interface BlockRendererProps {
-  layout: Page['layout']
+  layout: Page['layout'] | HomepageBlock[]
 }
 
 export function BlockRenderer({ layout }: BlockRendererProps) {
@@ -50,24 +59,55 @@ export function BlockRenderer({ layout }: BlockRendererProps) {
 
         // Render appropriate component based on blockType
         try {
+          // Generate unique key - use id if available (Homepage blocks), otherwise use index
+          const blockId = 'id' in block ? block.id : index;
+          
           switch (block.blockType) {
+            case 'video-hero':
+              return <VideoHero key={`video-hero-${blockId}`} data={block as any} />
+
             case 'hero':
-              return <HeroBlock key={index} data={block} />
+              return <HeroBlock key={`hero-${blockId}`} data={block as any} />
 
             case 'services':
-              return <ServicesBlock key={index} data={block} />
+              return <ServicesBlock key={`services-${blockId}`} data={block as any} />
 
             case 'cta':
-              return <CTABlock key={index} data={block} />
+              return <CTABlock key={`cta-${blockId}`} data={block as any} />
+
+            case 'about':
+              return <AboutBlock key={`about-${blockId}`} data={block as any} />
+
+            case 'testimonials':
+              return <TestimonialsBlock key={`testimonials-${blockId}`} data={block as any} />
+
+            case 'trust':
+              return <TrustSection key={`trust-${blockId}`} data={block as any} />
+
+            case 'before-after':
+              return <BeforeAfterSection key={`before-after-${blockId}`} data={block as any} />
+
+            case 'pricing':
+              return <PricingSection key={`pricing-${blockId}`} data={block as any} />
+
+            case 'process':
+              return <ProcessSection key={`process-${blockId}`} data={block as any} />
+
+            case 'doctor':
+              return <DoctorSection key={`doctor-${blockId}`} data={block as any} />
+
+            case 'faq':
+              return <FAQSection key={`faq-${blockId}`} data={block as any} />
 
             default:
               // Handle unknown block types gracefully
-              console.warn(`Unknown block type: ${block.blockType}`)
+              const unknownBlock = block as any;
+              console.warn(`Unknown block type: ${unknownBlock.blockType}`)
               return (
                 <div key={index} className="py-8 bg-yellow-50 dark:bg-yellow-900/20">
                   <div className="container mx-auto px-4 text-center">
                     <p className="text-yellow-800 dark:text-yellow-200">
-                      Unknown block type: {block.blockType}
+                      Unknown block type: {unknownBlock.blockType}
                     </p>
                   </div>
                 </div>

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_footer_contact_infos",
+  "info": {
+    "displayName": "Contact Info",
+    "description": "Contact information for footer"
+  },
+  "options": {},
+  "attributes": {
+    "address": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    }
+  }
+}

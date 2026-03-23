@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_homepage_pricing_plans",
+  "info": {
+    "displayName": "Pricing Plan",
+    "description": "Individual pricing plan"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "string",
+      "required": true
+    },
+    "period": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.feature-item"
+    },
+    "is_popular": {
+      "type": "boolean",
+      "default": false
+    },
+    "cta_label": {
+      "type": "string"
+    },
+    "cta_link": {
+      "type": "string"
+    }
+  }
+}

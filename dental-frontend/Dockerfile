@@ -24,9 +24,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-# Use npm ci for reproducible builds
-RUN npm ci --only=production && \
+# Install ALL dependencies (including devDependencies for build)
+RUN npm ci && \
     npm cache clean --force
 
 # ============================================
@@ -45,6 +44,16 @@ COPY . .
 # Set build-time environment variables
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+
+# Accept build args for environment variables
+ARG STRAPI_URL
+ARG STRAPI_API_TOKEN
+ARG NEXT_PUBLIC_SERVER_URL
+
+# Set environment variables for build
+ENV STRAPI_URL=${STRAPI_URL}
+ENV STRAPI_API_TOKEN=${STRAPI_API_TOKEN}
+ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 
 # Build Next.js application
 RUN npm run build

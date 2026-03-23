@@ -51,17 +51,15 @@ services:
       context: ./strapi-cms
       dockerfile: Dockerfile
 
+    image: vanhoadotbui2628/dental_cms:1.0.0
+    platform: linux/amd64
     container_name: dental-strapi
     restart: unless-stopped
-
-    depends_on:
-      postgres:
-        condition: service_healthy
-
     environment:
       # Server
       HOST: 0.0.0.0
       PORT: 1337
+      NODE_ENV: production
 
       # Database
       DATABASE_CLIENT: postgres
@@ -70,7 +68,8 @@ services:
       DATABASE_NAME: ${POSTGRES_DB:-dental_cms_strapi}
       DATABASE_USERNAME: ${POSTGRES_USER:-postgres}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      DATABASE_SSL: false
+      DATABASE_SSL: "false"
+      DATABASE_SCHEMA: public
 
       # Secrets (load from .env)
       APP_KEYS: ${STRAPI_APP_KEYS}
@@ -81,9 +80,10 @@ services:
 
       # URLs
       PUBLIC_URL: ${STRAPI_PUBLIC_URL:-http://localhost:1337}
-
-      # Node
-      NODE_ENV: production
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      PREVIEW_SECRET: ${PREVIEW_SECRET}
+      STRAPI_WEBHOOK_SECRET: ${STRAPI_WEBHOOK_SECRET}
+      NEXTJS_URL: ${NEXTJS_URL:-http://localhost:3000}
 
     volumes:
       - strapi_uploads:/app/public/uploads
@@ -117,25 +117,22 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-http://localhost:3000}
-
+        NEXT_PREVIEW_SECRET: your-secure-preview-secret-change-in-production
+        STRAPI_URL: https://knight-cheese-advisor-para.trycloudflare.com
+        STRAPI_API_TOKEN: 7f399a0c6012eb5520522f741cfc8ea0f3c5d3b32c5f1d08566bd951013faca178f9f8303403de061571bbee3edcad872b0b595a58a1892617c59f484605ecfcf3e7cdfe38de7322730eba6a32826aeab5d4ed8724f93330f0f28dd3963e83c291fd51df8b8dc9d6b43d06c7295861280d448b8d26e15064cc5dc02e242814f9
+    platform: linux/amd64
+    image: vanhoadotbui2628/dental_frontend:1.0.2
     container_name: dental-frontend
     restart: unless-stopped
-
-    depends_on:
-      strapi:
-        condition: service_healthy
-
     environment:
-      # Strapi API
-      STRAPI_URL: http://strapi:1337
-      STRAPI_API_TOKEN: ${STRAPI_API_TOKEN}
-
-      # Next.js
-      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-http://localhost:3000}
       NODE_ENV: production
+      STRAPI_URL: https://knight-cheese-advisor-para.trycloudflare.com
+      STRAPI_API_TOKEN: 7f399a0c6012eb5520522f741cfc8ea0f3c5d3b32c5f1d08566bd951013faca178f9f8303403de061571bbee3edcad872b0b595a58a1892617c59f484605ecfcf3e7cdfe38de7322730eba6a32826aeab5d4ed8724f93330f0f28dd3963e83c291fd51df8b8dc9d6b43d06c7295861280d448b8d26e15064cc5dc02e242814f9
+      NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      NEXT_PREVIEW_SECRET: your-secure-preview-secret-change-in-production
 
     ports:
-      - "${FRONTEND_PORT:-3000}:3000"
+      - "3003:3000"
 
     networks:
       - dental-network
@@ -144,9 +141,11 @@ services:
       test:
         [
           "CMD",
-          "node",
-          "-e",
-          "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000",
         ]
       interval: 30s
       timeout: 10s

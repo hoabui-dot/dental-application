@@ -1,24 +1,28 @@
 import Link from 'next/link'
 import { Button } from '@/src/components/ui/button'
-import type { Page } from '@/src/types/strapi'
+import type { HomepageCTABlock } from '@/src/types/strapi'
 
 /**
  * CTA (Call-to-Action) Block Component
  * 
  * Renders a prominent call-to-action section with text and button.
  * Used to drive conversions (e.g., "Book Appointment", "Contact Us").
+ * 
+ * Design System:
+ * - Background: primary-600 (sky blue)
+ * - Text: white
+ * - Button: white background with primary text
+ * - Typography: text-3xl/4xl/5xl for heading
+ * - Spacing: py-16/20 for vertical padding
  */
 
-// Extract CTA block type from Page layout
-type CTABlock = Extract<Page['layout'][number], { blockType: 'cta' }>
-
 interface CTABlockProps {
-  data: CTABlock
+  data: HomepageCTABlock
 }
 
 export function CTABlock({ data }: CTABlockProps) {
   // Determine if link is external or internal
-  const isExternal = data.link.startsWith('http') || data.link.startsWith('mailto:') || data.link.startsWith('tel:')
+  const isExternal = data.buttonLink.startsWith('http') || data.buttonLink.startsWith('mailto:') || data.buttonLink.startsWith('tel:')
 
   return (
     <section className="cta-block w-full bg-primary-600 py-16 md:py-20">
@@ -33,14 +37,14 @@ export function CTABlock({ data }: CTABlockProps) {
           <Button asChild size="lg" className="bg-white text-primary-600 hover:bg-neutral-50 font-semibold text-lg shadow-lg hover:shadow-xl">
             {isExternal ? (
               <a
-                href={data.link}
-                target={data.link.startsWith('http') ? '_blank' : undefined}
-                rel={data.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                href={data.buttonLink}
+                target={data.buttonLink.startsWith('http') ? '_blank' : undefined}
+                rel={data.buttonLink.startsWith('http') ? 'noopener noreferrer' : undefined}
               >
                 {data.buttonLabel}
               </a>
             ) : (
-              <Link href={data.link}>
+              <Link href={data.buttonLink}>
                 {data.buttonLabel}
               </Link>
             )}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_homepage_faqs",
+  "info": {
+    "displayName": "FAQ Section",
+    "description": "Frequently asked questions"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "questions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.faq-item"
+    }
+  }
+}

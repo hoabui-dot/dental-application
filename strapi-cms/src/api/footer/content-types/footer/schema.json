@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "footers",
+  "info": {
+    "singularName": "footer",
+    "pluralName": "footers",
+    "displayName": "Footer",
+    "description": "Footer configuration for the website"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "description": {
+      "type": "text"
+    },
+    "contact_info": {
+      "type": "component",
+      "component": "footer.contact-info",
+      "repeatable": false
+    },
+    "footer_links": {
+      "type": "component",
+      "component": "footer.link",
+      "repeatable": true
+    },
+    "social_links": {
+      "type": "component",
+      "component": "footer.social-link",
+      "repeatable": true
+    }
+  }
+}

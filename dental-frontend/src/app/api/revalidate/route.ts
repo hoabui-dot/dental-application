@@ -29,6 +29,9 @@ const MODEL_TAG_MAP: Record<string, string[]> = {
   article: ["articles", "article"],
   "bai-viet": ["articles", "bai-viet"],
   category: ["categories", "category"],
+  navigation: ["navigation"], // Navigation menu
+  footer: ["footer"], // Footer content
+  homepage: ["homepage"], // Homepage content
 };
 
 // Model to path mapping for specific revalidation

@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_homepage_doctor_profiles",
+  "info": {
+    "displayName": "Doctor Profile",
+    "description": "Individual doctor profile"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "specialization": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "experience_years": {
+      "type": "integer"
+    }
+  }
+}

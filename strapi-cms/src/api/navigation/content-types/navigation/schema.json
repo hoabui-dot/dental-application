@@ -4,17 +4,31 @@
   "info": {
     "singularName": "navigation",
     "pluralName": "navigations",
-    "displayName": "Navigation"
+    "displayName": "Global Navigation"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "menu_links": {
+    "navigation": {
       "type": "component",
-      "component": "menu.link",
+      "component": "menu.nav-item",
       "repeatable": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "ctaText": {
+      "type": "string",
+      "default": "Đặt lịch"
+    },
+    "ctaLink": {
+      "type": "string",
+      "default": "/booking"
     }
   }
 }

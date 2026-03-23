@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_homepage_pricings",
+  "info": {
+    "displayName": "Pricing Section",
+    "description": "Pricing plans with features"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "plans": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.pricing-plan"
+    }
+  }
+}

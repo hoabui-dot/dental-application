@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_homepage_trusts",
+  "info": {
+    "displayName": "Trust Section",
+    "description": "Trust indicators with stats and certifications"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.stat-item"
+    },
+    "certifications": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.certification-item"
+    }
+  }
+}

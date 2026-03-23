@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_homepage_video_heroes",
+  "info": {
+    "displayName": "Video Hero Section",
+    "description": "Premium video hero section with background video - 2026 design"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text",
+      "required": true
+    },
+    "ctaText": {
+      "type": "string",
+      "required": true
+    },
+    "ctaLink": {
+      "type": "string",
+      "required": true
+    },
+    "videoUrl": {
+      "type": "string",
+      "required": true
+    },
+    "posterImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "overlayOpacity": {
+      "type": "decimal",
+      "default": 0.4,
+      "min": 0,
+      "max": 1
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

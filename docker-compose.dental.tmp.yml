@@ -1,0 +1,112 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dental-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dental_cms_strapi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_dental_data:/var/lib/postgresql/data
+    networks:
+      - dental-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  strapi:
+    image: vanhoadotbui2628/dental_cms:1.0.0
+    container_name: dental-strapi
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: dental_cms_strapi
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_SSL: "false"
+      DATABASE_SCHEMA: public
+      APP_KEYS: 1r05bMPHwD42mUYeOWRNTw==,0OklUtllewJlZhzHPcEs1A==,HYPHeVFKy21fbmYRkNXsng==,U6MGvCrIvYzwFc5BX+jC3g==
+      API_TOKEN_SALT: HFBTyl5TbQh4LRyq68kY3A==
+      ADMIN_JWT_SECRET: Ow3nHJBVT5378ti+xvpQQg==
+      TRANSFER_TOKEN_SALT: x8Voe+7fNjUrTNinjMqfTg==
+      JWT_SECRET: Ow3nHJBVT5378ti+xvpQQg==
+      PUBLIC_URL: https://nhakhoaquoctesaigon.ddns.net
+      FRONTEND_URL: https://nhakhoaquoctesaigon.ddns.net
+      PREVIEW_SECRET: your-secure-preview-secret-change-in-production
+      STRAPI_WEBHOOK_SECRET: dental-webhook-secret-2026-change-in-production
+      NEXTJS_URL: https://nhakhoaquoctesaigon.ddns.net
+    volumes:
+      - strapi_uploads:/app/public/uploads
+      - strapi_cache:/app/.cache
+    ports:
+      - "1337:1337"
+    networks:
+      - dental-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:1337/_health",
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+  frontend:
+    image: vanhoadotbui2628/dental_frontend:1.0.0
+    container_name: dental-frontend
+    restart: unless-stopped
+    depends_on:
+      strapi:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SERVER_URL: https://nhakhoaquoctesaigon.ddns.net
+      STRAPI_URL: http://13.210.111.152:1337
+      STRAPI_API_TOKEN: 17d23dee39bfcd47d333c413e295deee0995354746a0043cd32eed8cadbcf796739ca2627a7f966ad4d6d01a4f3b741efcffab944ee56d9a4961c61c48c4b4746406092c04ccadd7267242d253d8e53597d4433bb481f858ebb651d239f86e5d58bc43eb20b4abbe85170494c046b353a922b65dac0b939485a5f56871edafa1
+      NEXT_PREVIEW_SECRET: your-secure-preview-secret-change-in-production
+    ports:
+      - "3003:3000"
+    networks:
+      - dental-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000",
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+volumes:
+  postgres_dental_data:
+  strapi_uploads:
+  strapi_cache:
+
+networks:
+  dental-network:
+    driver: bridge

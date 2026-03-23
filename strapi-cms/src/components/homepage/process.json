@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_homepage_processes",
+  "info": {
+    "displayName": "Process Section",
+    "description": "Step-by-step process"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "steps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.process-step"
+    }
+  }
+}

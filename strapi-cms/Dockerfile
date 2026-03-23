@@ -28,12 +28,33 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
+# Install ALL dependencies (including dev) for building
+RUN npm ci && \
+    npm cache clean --force
+
+# ============================================
+# Stage 2: Production Dependencies
+# ============================================
+FROM node:22-alpine AS prod-deps
+
+# Install build dependencies
+RUN apk add --no-cache \
+    libc6-compat \
+    python3 \
+    make \
+    g++
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install only production dependencies
 RUN npm ci --only=production && \
     npm cache clean --force
 
 # ============================================
-# Stage 2: Builder
+# Stage 3: Builder
 # ============================================
 FROM node:22-alpine AS builder
 
@@ -55,11 +76,23 @@ COPY . .
 # Set build environment
 ENV NODE_ENV=production
 
-# Build Strapi admin panel
+# Convert TypeScript config files to JavaScript for production (skip database.ts as we have database.js)
+RUN for file in config/*.ts; do \
+      if [ -f "$file" ] && [ "$(basename "$file")" != "database.ts" ]; then \
+        base=$(basename "$file" .ts); \
+        sed 's/export default/module.exports =/g' "$file" | \
+        sed 's/: string//g' | \
+        sed 's/: number//g' | \
+        sed 's/: boolean//g' > "config/$base.js"; \
+      fi; \
+    done && \
+    rm -f config/*.ts
+
+# Build Strapi admin panel (this will compile TS files and generate dist folder)
 RUN npm run build
 
 # ============================================
-# Stage 3: Runner (Production)
+# Stage 4: Runner (Production)
 # ============================================
 FROM node:22-alpine AS runner
 
@@ -72,16 +105,18 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 strapi && \
     adduser --system --uid 1001 strapi
 
+# Create directories first with proper ownership
+RUN mkdir -p /app/public/uploads /app/.cache /app/database/migrations && \
+    chown -R strapi:strapi /app
+
 # Copy necessary files from builder
 COPY --from=builder --chown=strapi:strapi /app/dist ./dist
-COPY --from=builder --chown=strapi:strapi /app/node_modules ./node_modules
+COPY --from=deps --chown=strapi:strapi /app/node_modules ./node_modules
 COPY --from=builder --chown=strapi:strapi /app/package.json ./package.json
+COPY --from=builder --chown=strapi:strapi /app/tsconfig.json ./tsconfig.json
 COPY --from=builder --chown=strapi:strapi /app/config ./config
 COPY --from=builder --chown=strapi:strapi /app/public ./public
-
-# Create directories for uploads and cache
-RUN mkdir -p /app/public/uploads /app/.cache && \
-    chown -R strapi:strapi /app/public/uploads /app/.cache
+COPY --from=builder --chown=strapi:strapi /app/src ./src
 
 # Expose port
 EXPOSE 1337

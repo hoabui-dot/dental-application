@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_homepage_testimonial_items",
+  "info": {
+    "displayName": "Testimonial Item",
+    "description": "Individual testimonial with name, content, and rating"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "rating": {
+      "type": "integer",
+      "min": 1,
+      "max": 5,
+      "default": 5
+    }
+  }
+}

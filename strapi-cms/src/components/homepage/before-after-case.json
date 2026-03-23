@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_homepage_before_after_cases",
+  "info": {
+    "displayName": "Before After Case",
+    "description": "Individual before/after case with images"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "before_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "after_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "treatment": {
+      "type": "string"
+    }
+  }
+}
