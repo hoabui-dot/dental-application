@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_about_pillar_items",
+  "info": {
+    "displayName": "Pillar Item",
+    "description": "Individual pillar item for philosophy section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    }
+  }
+}

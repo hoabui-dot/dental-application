@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_about_core_values",
+  "info": {
+    "displayName": "About Core Values",
+    "description": "Core values section with circular layout"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "values": {
+      "type": "component",
+      "repeatable": true,
+      "component": "about.value-item"
+    }
+  }
+}

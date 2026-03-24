@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_about_commitment_items",
+  "info": {
+    "displayName": "Commitment Item",
+    "description": "Individual commitment item for timeline"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

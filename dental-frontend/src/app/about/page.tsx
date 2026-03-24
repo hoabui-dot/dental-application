@@ -2,86 +2,75 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import AboutPageClient from './AboutPageClient';
 
-interface AboutPage {
-  id: number;
-  documentId: string;
-  title: string;
-  slug: string;
-  description?: string;
-  content?: any;
-  publishedAt: string;
-}
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
-const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
-
-async function getAboutPage(): Promise<AboutPage | null> {
+async function getAboutPageData() {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$eq]=about-us&populate=*`,
+    console.log('[About Page] Fetching data from:', `${STRAPI_URL}/api/pages?filters[slug][$eq]=about-us&populate=*&status=published`);
+    
+    const res = await fetch(
+      `${STRAPI_URL}/api/pages?filters[slug][$eq]=about-us&populate=*&status=published`,
       {
-        headers,
-        next: { revalidate: 3600 }, // Revalidate every hour
+        headers: {
+          'Authorization': `Bearer ${process.env.STRAPI_API_TOKEN}`
+        },
+        next: { revalidate: 60 },
+        cache: 'no-store' // Force fresh data
       }
     );
 
-    if (!response.ok) {
-      console.error('Failed to fetch about page:', response.statusText);
+    if (!res.ok) {
+      console.error('[About Page] Failed to fetch:', res.status, res.statusText);
       return null;
     }
 
-    const data = await response.json();
+    const data = await res.json();
+    console.log('[About Page] API response data length:', data.data?.length || 0);
     
     if (!data.data || data.data.length === 0) {
+      console.error('[About Page] No data found');
       return null;
     }
 
-    return data.data[0];
+    const page = data.data[0];
+    console.log('[About Page] Found page:', page.title, 'Published:', page.publishedAt);
+    
+    // Parse the content JSON
+    let content = {};
+    if (page.content) {
+      try {
+        // Check if content is already an object or a string
+        if (typeof page.content === 'string') {
+          content = JSON.parse(page.content);
+        } else {
+          content = page.content;
+        }
+        console.log('[About Page] Content sections:', Object.keys(content));
+      } catch (e) {
+        console.error('[About Page] Failed to parse content:', e);
+      }
+    }
+
+    return content;
   } catch (error) {
-    console.error('Error fetching about page:', error);
+    console.error('[About Page] Error fetching data:', error);
     return null;
   }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getAboutPage();
-
-  if (!page) {
-    return {
-      title: 'About Us',
-    };
-  }
-
   return {
-    title: page.title,
-    description: page.description || 'Learn about our mission, values, and team',
+    title: 'About Us - Saigon International Dental Clinic',
+    description: 'Learn about our mission, values, and the team behind Saigon International Dental Clinic'
   };
 }
 
 export default async function AboutPage() {
-  const page = await getAboutPage();
+  const content = await getAboutPageData();
 
-  if (!page) {
+  if (!content) {
     notFound();
   }
 
-  // Parse content
-  let pageData = page.content;
-  if (typeof pageData === 'string') {
-    try {
-      pageData = JSON.parse(pageData);
-    } catch (e) {
-      pageData = {};
-    }
-  }
-
-  return <AboutPageClient page={page} pageData={pageData} />;
+  return <AboutPageClient content={content} />;
 }

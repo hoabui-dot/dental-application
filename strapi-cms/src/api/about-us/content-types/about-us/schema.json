@@ -1,0 +1,36 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_us",
+  "info": {
+    "singularName": "about-us",
+    "pluralName": "about-us",
+    "displayName": "About Us",
+    "description": "About Us page with component-based layout"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "About Us"
+    },
+    "description": {
+      "type": "text"
+    },
+    "layout": {
+      "type": "dynamiczone",
+      "components": [
+        "about.hero",
+        "about.achievements",
+        "about.why-choose-us",
+        "about.philosophy",
+        "about.core-values",
+        "about.commitment",
+        "about.cta"
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_about_value_items",
+  "info": {
+    "displayName": "Value Item",
+    "description": "Individual value item for core values section"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

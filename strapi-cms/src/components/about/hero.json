@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_about_hero",
+  "info": {
+    "displayName": "About Hero",
+    "description": "Hero section for About Us page with badge, title, subtitle, description and image collage"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "default": "About Us"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_about_contact_info_items",
+  "info": {
+    "displayName": "Contact Info Item",
+    "description": "Individual contact info item for CTA section"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
