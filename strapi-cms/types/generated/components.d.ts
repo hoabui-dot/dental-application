@@ -1,5 +1,163 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface AboutAchievements extends Struct.ComponentSchema {
+  collectionName: 'components_about_achievements';
+  info: {
+    description: 'Achievements section with features list and image';
+    displayName: 'About Achievements';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    features: Schema.Attribute.Component<'homepage.feature-item', true>;
+    image: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutCommitment extends Struct.ComponentSchema {
+  collectionName: 'components_about_commitment';
+  info: {
+    description: 'Commitment section with timeline layout';
+    displayName: 'About Commitment';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    commitments: Schema.Attribute.Component<'about.commitment-item', true>;
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutCommitmentItem extends Struct.ComponentSchema {
+  collectionName: 'components_about_commitment_items';
+  info: {
+    description: 'Individual commitment item for timeline';
+    displayName: 'Commitment Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String & Schema.Attribute.Required;
+    number: Schema.Attribute.String & Schema.Attribute.Required;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutContactInfoItem extends Struct.ComponentSchema {
+  collectionName: 'components_about_contact_info_items';
+  info: {
+    description: 'Individual contact info item for CTA section';
+    displayName: 'Contact Info Item';
+  };
+  attributes: {
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutCoreValues extends Struct.ComponentSchema {
+  collectionName: 'components_about_core_values';
+  info: {
+    description: 'Core values section with circular layout';
+    displayName: 'About Core Values';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    values: Schema.Attribute.Component<'about.value-item', true>;
+  };
+}
+
+export interface AboutCta extends Struct.ComponentSchema {
+  collectionName: 'components_about_cta';
+  info: {
+    description: 'Call to action section for About Us page';
+    displayName: 'About CTA';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    contactInfo: Schema.Attribute.Component<'about.contact-info-item', true>;
+    description: Schema.Attribute.Text;
+    primaryButtonLink: Schema.Attribute.String;
+    primaryButtonText: Schema.Attribute.String & Schema.Attribute.Required;
+    secondaryButtonLink: Schema.Attribute.String;
+    secondaryButtonText: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutHero extends Struct.ComponentSchema {
+  collectionName: 'components_about_hero';
+  info: {
+    description: 'Hero section for About Us page with badge, title, subtitle, description and image collage';
+    displayName: 'About Hero';
+  };
+  attributes: {
+    badge: Schema.Attribute.String & Schema.Attribute.DefaultTo<'About Us'>;
+    description: Schema.Attribute.Text;
+    images: Schema.Attribute.Media<'images', true>;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutPhilosophy extends Struct.ComponentSchema {
+  collectionName: 'components_about_philosophy';
+  info: {
+    description: 'Philosophy section with quote and pillars';
+    displayName: 'About Philosophy';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'>;
+    pillars: Schema.Attribute.Component<'about.pillar-item', true>;
+    quote: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutPillarItem extends Struct.ComponentSchema {
+  collectionName: 'components_about_pillar_items';
+  info: {
+    description: 'Individual pillar item for philosophy section';
+    displayName: 'Pillar Item';
+  };
+  attributes: {
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutValueItem extends Struct.ComponentSchema {
+  collectionName: 'components_about_value_items';
+  info: {
+    description: 'Individual value item for core values section';
+    displayName: 'Value Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface AboutWhyChooseUs extends Struct.ComponentSchema {
+  collectionName: 'components_about_why_choose_us';
+  info: {
+    description: 'Why choose us section with features and images';
+    displayName: 'About Why Choose Us';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    features: Schema.Attribute.Component<'homepage.feature-item', true>;
+    images: Schema.Attribute.Media<'images', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface FooterContactInfo extends Struct.ComponentSchema {
   collectionName: 'components_footer_contact_infos';
   info: {
@@ -417,6 +575,17 @@ export interface MenuNavItem extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'about.achievements': AboutAchievements;
+      'about.commitment': AboutCommitment;
+      'about.commitment-item': AboutCommitmentItem;
+      'about.contact-info-item': AboutContactInfoItem;
+      'about.core-values': AboutCoreValues;
+      'about.cta': AboutCta;
+      'about.hero': AboutHero;
+      'about.philosophy': AboutPhilosophy;
+      'about.pillar-item': AboutPillarItem;
+      'about.value-item': AboutValueItem;
+      'about.why-choose-us': AboutWhyChooseUs;
       'footer.contact-info': FooterContactInfo;
       'footer.link': FooterLink;
       'footer.social-link': FooterSocialLink;
