@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { 
-  Sparkles, Phone, Mail, Clock, MessageCircle, MapPin, 
+import {
+  Sparkles, Phone, Mail, Clock, MessageCircle, MapPin,
   ExternalLink, Calendar, Send
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
@@ -18,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../components/ui/select';
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://pediatric-expired-through-casinos.trycloudflare.com';
 
 type FormData = {
   fullName: string;
@@ -33,22 +36,61 @@ interface ContactPageContent {
     title: string;
     subtitle: string;
   };
-  contactCards?: Array<{
-    icon: string;
+  quickContact?: {
+    cards: Array<{
+      icon: string;
+      title: string;
+      content: string;
+      subtitle: string;
+    }>;
+  };
+  contactForm?: {
     title: string;
-    content: string;
+    description: string;
+    imageId?: number;
+    imageUrl?: string;
+    badge?: {
+      title: string;
+      subtitle: string;
+    };
+    fields: Array<{
+      name: string;
+      label: string;
+      type: string;
+      required: boolean;
+      placeholder: string;
+      options?: Array<{ value: string; label: string }>;
+      rows?: number;
+    }>;
+  };
+  clinicLocations?: {
+    title: string;
     subtitle: string;
-  }>;
-  form?: any;
-  locations?: Array<{
-    name: string;
-    address: string;
-    phone: string;
-    imageUrl: string;
-    mapUrl: string;
-  }>;
-  map?: any;
-  cta?: any;
+    locations: Array<{
+      name: string;
+      address: string;
+      phone: string;
+      imageId?: number;
+      imageUrl?: string;
+      mapUrl: string;
+    }>;
+  };
+  mapSection?: {
+    enabled: boolean;
+    title: string;
+    description: string;
+    note: string;
+    markers: Array<{ name: string; address: string }>;
+  };
+  cta?: {
+    title: string;
+    description: string;
+    primaryButtonText: string;
+    primaryButtonLink: string;
+    secondaryButtonText: string;
+    secondaryButtonLink: string;
+    stats?: Array<{ value: string; label: string }>;
+  };
 }
 
 interface ContactPageClientProps {
@@ -60,7 +102,11 @@ const iconMap: Record<string, any> = {
 };
 
 export default function ContactPageClient({ content }: ContactPageClientProps) {
-  const { hero, contactCards, form, locations, map, cta } = content;
+  const { hero, quickContact, contactForm, clinicLocations, mapSection, cta } = content;
+  const contactCards = quickContact?.cards;
+  const form = contactForm;
+  const locations = clinicLocations?.locations;
+  const map = mapSection;
   const {
     register,
     handleSubmit,
@@ -85,14 +131,14 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
 
       {/* Contact Hero */}
       {hero && (
-        <motion.div 
+        <motion.div
           className="relative bg-gradient-to-b from-sky-50 to-white py-20 px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div 
+            <motion.div
               className="inline-flex items-center justify-center w-16 h-16 bg-sky-100 rounded-full mb-6"
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -105,7 +151,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
                 })()
               )}
             </motion.div>
-            <motion.h1 
+            <motion.h1
               className="text-5xl font-bold text-gray-900 mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,7 +159,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
             >
               {hero.title}
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-xl text-gray-600 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -128,7 +174,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
       {/* Quick Contact Info */}
       {contactCards && contactCards.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             initial="hidden"
             whileInView="visible"
@@ -169,7 +215,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
       {/* Contact Form */}
       {form && (
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 gap-12 items-center"
             initial="hidden"
             whileInView="visible"
@@ -184,7 +230,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
             }}
           >
             {/* Form Section */}
-            <motion.div 
+            <motion.div
               className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100"
               variants={{
                 hidden: { opacity: 0, x: -50 },
@@ -300,22 +346,23 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
             </motion.div>
 
             {/* Image Section */}
-            <motion.div 
+            <motion.div
               className="relative"
               variants={{
                 hidden: { opacity: 0, x: 50 },
                 visible: { opacity: 1, x: 0 }
               }}
             >
-              <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src={form.imageUrl || 'https://images.unsplash.com/photo-1770321119162-05c18fbcfdb9?w=1080&q=80'}
+              <div className="rounded-3xl overflow-hidden shadow-2xl relative h-[600px]">
+                <Image
+                  src={form.imageUrl || `${STRAPI_URL}/uploads/dental_consultation_d555f4a87c.jpg`}
                   alt="Dental consultation"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               {form.badge && (
-                <motion.div 
+                <motion.div
                   className="absolute -bottom-6 -right-6 bg-sky-500 text-white rounded-3xl p-8 shadow-2xl max-w-xs"
                   initial={{ opacity: 0, scale: 0.8, x: 20, y: 20 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
@@ -335,7 +382,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
       {locations && locations.length > 0 && (
         <div className="bg-gray-50 py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            <motion.div 
+            <motion.div
               className="text-center mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -350,7 +397,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
               </p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="grid md:grid-cols-2 gap-8"
               initial="hidden"
               whileInView="visible"
@@ -373,11 +420,12 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
                     visible: { opacity: 1, y: 0 }
                   }}
                 >
-                  <div className="h-64 overflow-hidden">
-                    <img
-                      src={location.imageUrl}
+                  <div className="h-64 overflow-hidden relative">
+                    <Image
+                      src={location.imageUrl || `${STRAPI_URL}/uploads/clinic_interior_d7_81acf81d4a.jpg`}
                       alt={location.name}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      fill
+                      className="object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 
@@ -422,7 +470,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
 
       {/* Map Section */}
       {map && map.enabled && (
-        <motion.div 
+        <motion.div
           className="w-full h-[500px] bg-gray-200 relative overflow-hidden"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -431,7 +479,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
         >
           {/* Map Placeholder */}
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sky-100 to-sky-50">
-            <motion.div 
+            <motion.div
               className="text-center p-8"
               initial={{ scale: 0.8, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
@@ -456,9 +504,8 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
           {map.markers?.map((marker: any, index: number) => (
             <div
               key={index}
-              className={`absolute bg-white rounded-2xl shadow-lg p-4 max-w-xs animate-pulse ${
-                index === 0 ? 'top-1/4 left-1/4' : 'bottom-1/3 right-1/4'
-              }`}
+              className={`absolute bg-white rounded-2xl shadow-lg p-4 max-w-xs animate-pulse ${index === 0 ? 'top-1/4 left-1/4' : 'bottom-1/3 right-1/4'
+                }`}
               style={{ animationDelay: `${index * 0.5}s` }}
             >
               <p className="font-semibold text-gray-900">{marker.name}</p>
@@ -470,7 +517,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
 
       {/* CTA Section */}
       {cta && (
-        <motion.div 
+        <motion.div
           className="relative bg-gradient-to-r from-sky-500 to-sky-600 py-20 px-4 overflow-hidden"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -482,7 +529,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-700 rounded-full opacity-20 blur-3xl" />
 
           <div className="max-w-4xl mx-auto text-center relative z-10">
-            <motion.h2 
+            <motion.h2
               className="text-4xl md:text-5xl font-bold text-white mb-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -491,7 +538,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
             >
               {cta.title}
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-xl text-sky-50 mb-8 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -501,7 +548,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
               {cta.description}
             </motion.p>
 
-            <motion.div 
+            <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -522,7 +569,7 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
             </motion.div>
 
             {cta.stats && (
-              <motion.div 
+              <motion.div
                 className="mt-12 flex flex-wrap justify-center gap-8 text-white"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
