@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
         hostname: "strapi",
         port: "1337",
       },
+      // Unsplash images (for placeholder/demo images)
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
       // S3 and other cloud storage
       {
         protocol: "https",

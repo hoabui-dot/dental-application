@@ -3,7 +3,7 @@ const { Client } = require("pg");
 
 const STRAPI_URL =
   process.env.STRAPI_URL ||
-  "https://knight-cheese-advisor-para.trycloudflare.com";
+  "https://pediatric-expired-through-casinos.trycloudflare.com";
 
 const DB_CONFIG = {
   host: "100.68.50.41",

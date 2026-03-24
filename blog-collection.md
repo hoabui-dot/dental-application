@@ -105,7 +105,7 @@ POSTGRES_PASSWORD=postgres
 
 ## MUST ALSO:
 
-* Call Strapi API https://knight-cheese-advisor-para.trycloudflare.com
+* Call Strapi API https://pediatric-expired-through-casinos.trycloudflare.com (ALWAYS use strapi with api)
 * Ensure data integrity
 
 ---

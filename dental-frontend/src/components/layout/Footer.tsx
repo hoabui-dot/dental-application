@@ -22,8 +22,7 @@ export async function Footer() {
   const footer = await getFooter();
 
   return (
-    <footer className="relative bg-[#DFF2FA] text-black -mt-16 pt-24">
-      <div className="absolute top-0 left-0 right-0 h-24 bg-[#DFF2FA] rounded-t-[60px]"></div>
+    <footer className="relative bg-[#DFF2FA] text-black mt-0 pt-16">
       <div className="relative z-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-12 mb-12">

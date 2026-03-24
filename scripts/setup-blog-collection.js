@@ -27,12 +27,12 @@ async function setupBlogCollection() {
 
     console.log("🔍 Fetching homepage...");
     const homepageResponse = await axios.get(
-      `${STRAPI_URL}/api/homepage?populate=deep`,
+      `${STRAPI_URL}/api/homepage?populate[layout][populate]=*`,
       { headers },
     );
 
     const homepage = homepageResponse.data.data;
-    const currentLayout = homepage.attributes.layout || [];
+    const currentLayout = homepage.layout || [];
 
     // Find existing blog collection section
     const blogCollectionIndex = currentLayout.findIndex(

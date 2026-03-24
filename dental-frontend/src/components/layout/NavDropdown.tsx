@@ -32,7 +32,7 @@ export function NavDropdown({ label, href, children }: NavDropdownProps) {
 
   return (
     <div
-      className="relative"
+      className="relative group"
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
@@ -63,28 +63,34 @@ export function NavDropdown({ label, href, children }: NavDropdownProps) {
         </svg>
       </Link>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - with padding bridge to prevent gap */}
       {isOpen && children.length > 0 && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-          {children.map((child) => {
-            const isChildActive = pathname === child.href;
-            
-            return (
-              <Link
-                key={child.id}
-                href={child.href}
-                className={`
-                  block px-4 py-2.5 text-sm transition-colors
-                  ${isChildActive
-                    ? 'text-sky-500 bg-sky-50 font-medium'
-                    : 'text-gray-700 hover:text-sky-500 hover:bg-gray-50'
-                  }
-                `.trim()}
-              >
-                {child.label}
-              </Link>
-            );
-          })}
+        <div className="absolute top-full left-0 pt-2 w-56">
+          {/* Invisible bridge to cover the gap */}
+          <div className="absolute top-0 left-0 right-0 h-2" />
+          
+          {/* Actual dropdown content */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+            {children.map((child) => {
+              const isChildActive = pathname === child.href;
+              
+              return (
+                <Link
+                  key={child.id}
+                  href={child.href}
+                  className={`
+                    block px-4 py-2.5 text-sm transition-colors
+                    ${isChildActive
+                      ? 'text-sky-500 bg-sky-50 font-medium'
+                      : 'text-gray-700 hover:text-sky-500 hover:bg-gray-50'
+                    }
+                  `.trim()}
+                >
+                  {child.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

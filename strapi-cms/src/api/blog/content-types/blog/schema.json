@@ -21,6 +21,10 @@
       "targetField": "title",
       "required": true
     },
+    "category": {
+      "type": "string",
+      "required": false
+    },
     "coverImage": {
       "type": "media",
       "multiple": false,

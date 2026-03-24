@@ -426,6 +426,8 @@ export async function getHomepage(): Promise<Homepage> {
           "*",
         "populate[layout][on][homepage.testimonials][populate][items][populate]":
           "*",
+        "populate[layout][on][homepage.blog-collection-section][populate][posts][populate]":
+          "*",
       },
       tags: ["homepage"], // Cache tag for revalidation
     });

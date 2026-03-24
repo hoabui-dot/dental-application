@@ -83,13 +83,13 @@ export function FAQSection({ data }: FAQSectionProps) {
 
         <div className="mt-12 text-center bg-sky-50 rounded-2xl p-8">
           <p className="text-gray-700 mb-4">
-            Vẫn còn thắc mắc? Chúng tôi sẵn sàng hỗ trợ!
+            Still have questions? We're here to help!
           </p>
           <Link
             href="/contact"
             className="text-sky-600 font-semibold hover:text-sky-700 transition-colors"
           >
-            Liên hệ với chúng tôi →
+            Contact with use →
           </Link>
         </div>
       </div>

@@ -3,20 +3,19 @@ import Link from 'next/link';
 
 interface BlogPost {
   id: number;
-  attributes: {
-    title: string;
-    slug: string;
-    excerpt?: string;
-    coverImage?: {
-      data?: {
-        attributes: {
-          url: string;
-          alternativeText?: string;
-        };
+  documentId?: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  coverImage?: {
+    data?: {
+      attributes: {
+        url: string;
+        alternativeText?: string;
       };
     };
-    publishedAt: string;
-  };
+  } | null;
+  publishedAt: string;
 }
 
 interface BlogCollectionSectionProps {
@@ -48,42 +47,45 @@ export default function BlogCollectionSection({
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-20 px-4 bg-gradient-to-b from-primary-50 to-background">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {/* Section Header */}
+        <div className="text-center mb-16 animate-fade-in-up">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-foreground-secondary max-w-3xl mx-auto">
               {subtitle}
             </p>
           )}
         </div>
 
+        {/* Blog Grid */}
         <div className={`grid grid-cols-1 ${gridCols[layout]} gap-8`}>
           {posts.map((post) => {
-            const imageUrl = post.attributes.coverImage?.data?.attributes?.url;
-            const imageAlt = post.attributes.coverImage?.data?.attributes?.alternativeText || post.attributes.title;
+            const imageUrl = post.coverImage?.data?.attributes?.url;
+            const imageAlt = post.coverImage?.data?.attributes?.alternativeText || post.title;
 
             return (
               <Link
                 key={post.id}
-                href={`/blog/${post.attributes.slug}`}
-                className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+                href={`/news/${post.slug}`}
+                className="group bg-background-secondary rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-border hover:border-primary-300"
               >
-                <div className="relative h-48 bg-gray-200">
+                {/* Image Container */}
+                <div className="relative h-56 bg-gradient-to-br from-primary-100 to-secondary-100 overflow-hidden">
                   {imageUrl ? (
                     <Image
                       src={imageUrl.startsWith('http') ? imageUrl : `${strapiUrl}${imageUrl}`}
                       alt={imageAlt}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
+                    <div className="w-full h-full flex items-center justify-center">
                       <svg
-                        className="w-16 h-16 text-blue-400"
+                        className="w-20 h-20 text-primary-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -91,31 +93,55 @@ export default function BlogCollectionSection({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
+                          strokeWidth={1.5}
                           d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
                         />
                       </svg>
                     </div>
                   )}
+                  {/* Overlay gradient on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
+                {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {post.attributes.title}
+                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
+                    {post.title}
                   </h3>
-                  {post.attributes.excerpt && (
-                    <p className="text-gray-600 line-clamp-3 mb-4">
-                      {post.attributes.excerpt}
+                  {post.excerpt && (
+                    <p className="text-foreground-secondary line-clamp-3 mb-4 leading-relaxed">
+                      {post.excerpt}
                     </p>
                   )}
-                  <div className="flex items-center text-sm text-gray-500">
-                    <time dateTime={post.attributes.publishedAt}>
-                      {new Date(post.attributes.publishedAt).toLocaleDateString('vi-VN', {
+                  
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
+                    <time 
+                      dateTime={post.publishedAt}
+                      className="text-sm text-foreground-muted"
+                    >
+                      {new Date(post.publishedAt).toLocaleDateString('vi-VN', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                       })}
                     </time>
+                    <span className="text-primary-600 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                      Đọc thêm
+                      <svg 
+                        className="w-4 h-4" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M9 5l7 7-7 7" 
+                        />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               </Link>
