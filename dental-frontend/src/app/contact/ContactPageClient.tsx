@@ -102,6 +102,17 @@ const iconMap: Record<string, any> = {
 };
 
 export default function ContactPageClient({ content }: ContactPageClientProps) {
+  // Debug: Log the content structure
+  console.log('📦 Contact Page Content:', {
+    hasHero: !!content.hero,
+    hasQuickContact: !!content.quickContact,
+    hasContactForm: !!content.contactForm,
+    hasClinicLocations: !!content.clinicLocations,
+    hasMapSection: !!content.mapSection,
+    hasCta: !!content.cta,
+    contentKeys: Object.keys(content)
+  });
+
   const { hero, quickContact, contactForm, clinicLocations, mapSection, cta } = content;
   const contactCards = quickContact?.cards;
   const form = contactForm;
@@ -128,6 +139,27 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
 
   return (
     <div className="min-h-screen bg-white">
+
+      {/* Debug Info - Remove in production */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 m-4">
+          <p className="font-bold">Debug Info:</p>
+          <pre className="text-xs overflow-auto max-h-40">
+            {JSON.stringify({
+              hasHero: !!hero,
+              hasQuickContact: !!quickContact,
+              hasContactCards: !!contactCards,
+              contactCardsLength: contactCards?.length,
+              hasForm: !!form,
+              hasLocations: !!locations,
+              locationsLength: locations?.length,
+              hasMap: !!map,
+              hasCta: !!cta,
+              contentKeys: Object.keys(content)
+            }, null, 2)}
+          </pre>
+        </div>
+      )}
 
       {/* Contact Hero */}
       {hero && (
