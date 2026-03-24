@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useState, useMemo, useCallback } from 'react'
 import {
     Award, TrendingUp, Users, Scan, UserCheck, FileText, Sofa,
     Lightbulb, Shield, Heart, Smile, Star, Sprout, Calendar, ArrowRight
@@ -44,7 +45,25 @@ const scaleIn = {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
 }
 
+// Add global styles for hiding scrollbar
+if (typeof document !== 'undefined') {
+    const style = document.createElement('style')
+    style.textContent = `
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    `
+    document.head.appendChild(style)
+}
+
 export function AboutUsContent({ content, page }: AboutUsContentProps) {
+    const [currentCommitmentIndex, setCurrentCommitmentIndex] = useState(0)
+    const [isTransitioning, setIsTransitioning] = useState(false)
+    
     if (!content) {
         return (
             <div className="container mx-auto px-4 py-16">
@@ -55,6 +74,53 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
     }
 
     const { hero, achievements, whyChooseUs, philosophy, coreValues, commitment, cta } = content
+    
+    // Safe commitment data handling with memoization
+    const commitmentItems = useMemo(() => commitment?.commitments || [], [commitment])
+    const itemsPerSlide = 3
+    const totalItems = commitmentItems.length
+    const totalSlides = totalItems > 0 ? Math.ceil(totalItems / itemsPerSlide) : 0
+    
+    // Memoize current slide items to prevent recalculation
+    const currentSlideItems = useMemo(() => {
+        if (totalItems === 0 || totalSlides === 0) return []
+        
+        // Ensure index is always valid
+        const validIndex = Math.max(0, Math.min(currentCommitmentIndex, totalSlides - 1))
+        const startIndex = validIndex * itemsPerSlide
+        const endIndex = Math.min(startIndex + itemsPerSlide, totalItems)
+        
+        return commitmentItems.slice(startIndex, endIndex)
+    }, [commitmentItems, currentCommitmentIndex, totalItems, totalSlides, itemsPerSlide])
+    
+    // Navigation handlers with debounce
+    const handlePrevSlide = useCallback(() => {
+        if (totalSlides <= 1 || isTransitioning) return
+        setIsTransitioning(true)
+        setCurrentCommitmentIndex((prev) => {
+            const newIndex = (prev - 1 + totalSlides) % totalSlides
+            return newIndex
+        })
+        setTimeout(() => setIsTransitioning(false), 300)
+    }, [totalSlides, isTransitioning])
+    
+    const handleNextSlide = useCallback(() => {
+        if (totalSlides <= 1 || isTransitioning) return
+        setIsTransitioning(true)
+        setCurrentCommitmentIndex((prev) => {
+            const newIndex = (prev + 1) % totalSlides
+            return newIndex
+        })
+        setTimeout(() => setIsTransitioning(false), 300)
+    }, [totalSlides, isTransitioning])
+    
+    const handleGoToSlide = useCallback((index: number) => {
+        if (totalSlides > 0 && index >= 0 && index < totalSlides && !isTransitioning) {
+            setIsTransitioning(true)
+            setCurrentCommitmentIndex(index)
+            setTimeout(() => setIsTransitioning(false), 300)
+        }
+    }, [totalSlides, isTransitioning])
 
     return (
         <div className="w-full bg-white">
@@ -404,7 +470,7 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                     viewport={{ once: true, margin: "-100px" }}
                     className="px-6 py-24 md:py-32 max-w-7xl mx-auto"
                 >
-                    <motion.div className="text-center mb-16" variants={staggerContainer}>
+                    <motion.div className="text-center mb-20" variants={staggerContainer}>
                         {coreValues.badge && (
                             <motion.div variants={fadeIn} className="inline-block px-4 py-2 bg-sky-100 rounded-full mb-4">
                                 <span className="text-sky-600 font-medium">{coreValues.badge}</span>
@@ -423,42 +489,142 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                     {coreValues.values && (
                         <>
                             <div className="hidden md:block">
-                                <div className="relative max-w-4xl mx-auto h-[600px]">
+                                <div className="relative max-w-5xl mx-auto h-[750px]">
+                                    {/* Animated center circle with trendy 2026 effects */}
                                     <motion.div
-                                        variants={scaleIn}
-                                        whileHover={{ scale: 1.05, rotate: 5 }}
-                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-br from-sky-400 to-sky-600 rounded-full shadow-2xl flex items-center justify-center z-10"
+                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 mt-16"
+                                        initial={{ scale: 0, rotate: -180 }}
+                                        whileInView={{ scale: 1, rotate: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ 
+                                            duration: 1.2, 
+                                            ease: [0.34, 1.56, 0.64, 1],
+                                            delay: 0.3
+                                        }}
                                     >
-                                        <div className="text-center text-white">
-                                            <p className="text-4xl font-bold mb-2">{coreValues.values.length}</p>
-                                            <p className="text-sm uppercase tracking-wider">Core Values</p>
-                                        </div>
+                                        {/* Outer glow ring */}
+                                        <motion.div
+                                            className="absolute inset-0 rounded-full"
+                                            animate={{ 
+                                                scale: [1, 1.15, 1],
+                                                opacity: [0.3, 0.5, 0.3]
+                                            }}
+                                            transition={{ 
+                                                duration: 3,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }}
+                                            style={{
+                                                background: 'radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, transparent 70%)',
+                                                filter: 'blur(20px)',
+                                                width: '220px',
+                                                height: '220px',
+                                                left: '50%',
+                                                top: '50%',
+                                                transform: 'translate(-50%, -50%)'
+                                            }}
+                                        />
+                                        
+                                        {/* Main circle */}
+                                        <motion.div
+                                            whileHover={{ 
+                                                scale: 1.08,
+                                                rotate: 360,
+                                                transition: { duration: 0.8, ease: "easeInOut" }
+                                            }}
+                                            animate={{
+                                                rotate: [0, 5, -5, 0],
+                                            }}
+                                            transition={{
+                                                rotate: {
+                                                    duration: 6,
+                                                    repeat: Infinity,
+                                                    ease: "easeInOut"
+                                                }
+                                            }}
+                                            className="relative w-56 h-56 bg-gradient-to-br from-sky-400 via-sky-500 to-sky-600 rounded-full shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden"
+                                        >
+                                            {/* Shimmer effect */}
+                                            <motion.div
+                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
+                                                animate={{
+                                                    x: ['-100%', '200%']
+                                                }}
+                                                transition={{
+                                                    duration: 3,
+                                                    repeat: Infinity,
+                                                    ease: "easeInOut",
+                                                    repeatDelay: 2
+                                                }}
+                                            />
+                                            
+                                            {/* Content */}
+                                            <div className="text-center text-white relative z-10">
+                                                <motion.p 
+                                                    className="text-5xl font-bold mb-2"
+                                                    animate={{ scale: [1, 1.1, 1] }}
+                                                    transition={{ duration: 2, repeat: Infinity }}
+                                                >
+                                                    {coreValues.values.length}
+                                                </motion.p>
+                                                <p className="text-sm uppercase tracking-wider font-semibold">Core Values</p>
+                                            </div>
+                                        </motion.div>
                                     </motion.div>
 
                                     {coreValues.values.map((value: any, index: number) => {
                                         const Icon = iconMap[value.icon] || Heart
                                         const positions = [
-                                            'top-0 left-1/2 -translate-x-1/2 -translate-y-0',
-                                            'bottom-0 left-0 translate-y-0',
-                                            'bottom-0 right-0 translate-y-0'
+                                            'top-0 left-1/2 -translate-x-1/2',
+                                            'bottom-8 left-8',
+                                            'bottom-8 right-8'
                                         ]
                                         return (
                                             <motion.div
                                                 key={index}
-                                                variants={fadeInUp}
-                                                custom={index}
-                                                whileHover={{ y: -8, scale: 1.02 }}
-                                                className={`absolute ${positions[index] || positions[0]} w-72`}
+                                                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                                viewport={{ once: true }}
+                                                transition={{ 
+                                                    duration: 0.6, 
+                                                    delay: 0.5 + (index * 0.15),
+                                                    ease: [0.34, 1.56, 0.64, 1]
+                                                }}
+                                                whileHover={{ 
+                                                    y: -12, 
+                                                    scale: 1.03,
+                                                    transition: { duration: 0.3 }
+                                                }}
+                                                className={`absolute ${positions[index] || positions[0]} w-80`}
                                             >
-                                                <div className="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all border border-slate-100">
-                                                    <div className="bg-sky-100 p-4 rounded-2xl w-fit mb-4 mx-auto">
-                                                        <Icon className="w-8 h-8 text-sky-600" />
+                                                <motion.div 
+                                                    className="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all border border-slate-100 relative overflow-hidden group"
+                                                    whileHover={{
+                                                        borderColor: 'rgb(14, 165, 233, 0.3)'
+                                                    }}
+                                                >
+                                                    {/* Hover gradient effect */}
+                                                    <motion.div
+                                                        className="absolute inset-0 bg-gradient-to-br from-sky-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    />
+                                                    
+                                                    <div className="relative z-10">
+                                                        <motion.div 
+                                                            className="bg-gradient-to-br from-sky-100 to-sky-50 p-4 rounded-2xl w-fit mb-4 mx-auto"
+                                                            whileHover={{ 
+                                                                scale: 1.15, 
+                                                                rotate: [0, -10, 10, 0],
+                                                                transition: { duration: 0.5 }
+                                                            }}
+                                                        >
+                                                            <Icon className="w-8 h-8 text-sky-600" />
+                                                        </motion.div>
+                                                        <h3 className="text-2xl font-bold text-slate-900 mb-3 text-center">{value.title}</h3>
+                                                        <p className="text-slate-600 text-center leading-relaxed">
+                                                            {value.description}
+                                                        </p>
                                                     </div>
-                                                    <h3 className="text-2xl font-semibold text-slate-900 mb-3 text-center">{value.title}</h3>
-                                                    <p className="text-slate-600 text-center leading-relaxed">
-                                                        {value.description}
-                                                    </p>
-                                                </div>
+                                                </motion.div>
                                             </motion.div>
                                         )
                                     })}
@@ -472,11 +638,16 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                                         <motion.div
                                             key={index}
                                             variants={scaleIn}
+                                            whileHover={{ scale: 1.02 }}
                                             className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100"
                                         >
-                                            <div className="bg-sky-100 p-4 rounded-2xl w-fit mb-4 mx-auto">
+                                            <motion.div 
+                                                className="bg-gradient-to-br from-sky-100 to-sky-50 p-4 rounded-2xl w-fit mb-4 mx-auto"
+                                                whileHover={{ scale: 1.1, rotate: 360 }}
+                                                transition={{ duration: 0.5 }}
+                                            >
                                                 <Icon className="w-8 h-8 text-sky-600" />
-                                            </div>
+                                            </motion.div>
                                             <h3 className="text-2xl font-semibold text-slate-900 mb-3 text-center">{value.title}</h3>
                                             <p className="text-slate-600 text-center leading-relaxed">
                                                 {value.description}
@@ -505,194 +676,294 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                                     <span className="text-sky-600 font-medium">{commitment.badge}</span>
                                 </motion.div>
                             )}
-                            <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                            <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
                                 {commitment.title}
                             </motion.h2>
                             {commitment.description && (
-                                <motion.p variants={fadeInUp} className="text-lg text-slate-600 max-w-2xl mx-auto">
+                                <motion.p variants={fadeInUp} className="text-xl text-slate-600 max-w-3xl mx-auto">
                                     {commitment.description}
                                 </motion.p>
                             )}
                         </motion.div>
 
-                        {commitment.commitments && (
-                            <>
-                                <div className="hidden md:block relative">
-                                    <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-sky-200 -translate-x-1/2"></div>
-
-                                    <motion.div className="space-y-16" variants={staggerContainer}>
-                                        {commitment.commitments.map((item: any, index: number) => {
-                                            const Icon = iconMap[item.icon] || Star
-                                            const isEven = index % 2 === 0
-
-                                            return (
-                                                <motion.div key={index} variants={fadeInUp} className="relative">
-                                                    <motion.div
-                                                        whileHover={{ scale: 1.1, rotate: 360 }}
-                                                        transition={{ duration: 0.5 }}
-                                                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-sky-500 rounded-full flex items-center justify-center shadow-lg z-10"
+                        {commitmentItems.length > 0 && (
+                            <div className="max-w-4xl mx-auto">
+                                <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden mb-8 min-h-[300px]">
+                                    {currentSlideItems.length > 0 ? (
+                                        <motion.div 
+                                            className={`grid gap-0 ${
+                                                currentSlideItems.length === 1 
+                                                    ? 'grid-cols-1' 
+                                                    : currentSlideItems.length === 2 
+                                                    ? 'grid-cols-1 md:grid-cols-2' 
+                                                    : 'grid-cols-1 md:grid-cols-3'
+                                            }`}
+                                            key={currentCommitmentIndex}
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            {currentSlideItems.map((item: any, index: number) => {
+                                                const Icon = iconMap[item.icon] || Star
+                                                const itemsInSlide = currentSlideItems.length
+                                                return (
+                                                    <div
+                                                        key={`${currentCommitmentIndex}-${index}`}
+                                                        className={`p-8 ${index < itemsInSlide - 1 ? 'md:border-r border-slate-200' : ''}`}
                                                     >
-                                                        <span className="text-2xl font-bold text-white">{item.number}</span>
-                                                    </motion.div>
-
-                                                    <div className={`grid grid-cols-2 gap-8 ${isEven ? '' : 'text-right'}`}>
-                                                        <div className={isEven ? 'pr-12' : 'col-start-2 pl-12'}>
+                                                        <div className="flex flex-col items-center text-center">
                                                             <motion.div
-                                                                whileHover={{ y: -4, x: isEven ? 4 : -4 }}
-                                                                className="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all border border-slate-100"
+                                                                whileHover={{ scale: 1.1, rotate: 360 }}
+                                                                transition={{ duration: 0.6 }}
+                                                                className="w-16 h-16 bg-gradient-to-br from-sky-400 to-sky-600 rounded-full flex items-center justify-center shadow-lg mb-4"
                                                             >
-                                                                <div className={`bg-sky-100 p-4 rounded-2xl w-fit mb-4 ${isEven ? '' : 'ml-auto'}`}>
-                                                                    <Icon className="w-8 h-8 text-sky-600" />
-                                                                </div>
-                                                                <h3 className="text-2xl font-semibold text-slate-900 mb-2">{item.title}</h3>
-                                                                {item.subtitle && (
-                                                                    <p className="text-sm text-sky-600 uppercase tracking-wider mb-3">
-                                                                        {item.subtitle}
-                                                                    </p>
-                                                                )}
-                                                                <p className="text-slate-600 leading-relaxed">
-                                                                    {item.description}
-                                                                </p>
+                                                                <Icon className="w-8 h-8 text-white" />
                                                             </motion.div>
+                                                            <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                                                            {item.subtitle && (
+                                                                <p className="text-sm text-sky-600 uppercase tracking-wider mb-3 font-semibold">
+                                                                    {item.subtitle}
+                                                                </p>
+                                                            )}
+                                                            <p className="text-slate-600 leading-relaxed text-sm">
+                                                                {item.description}
+                                                            </p>
                                                         </div>
-                                                        <div className={isEven ? 'col-start-2' : 'col-start-1'}></div>
                                                     </div>
-                                                </motion.div>
-                                            )
-                                        })}
-                                    </motion.div>
+                                                )
+                                            })}
+                                        </motion.div>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-[300px]">
+                                            <p className="text-slate-400">Loading...</p>
+                                        </div>
+                                    )}
                                 </div>
 
-                                <motion.div className="md:hidden space-y-8" variants={staggerContainer}>
-                                    {commitment.commitments.map((item: any, index: number) => {
-                                        const Icon = iconMap[item.icon] || Star
+                                {totalSlides > 1 && (
+                                    <div className="flex items-center justify-center gap-4">
+                                        <button
+                                            onClick={handlePrevSlide}
+                                            disabled={isTransitioning}
+                                            className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-sky-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            aria-label="Previous slide"
+                                            type="button"
+                                        >
+                                            <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                            </svg>
+                                        </button>
+                                        
+                                        <div className="flex gap-2">
+                                            {Array.from({ length: totalSlides }).map((_, index: number) => (
+                                                <button
+                                                    key={`dot-${index}`}
+                                                    onClick={() => handleGoToSlide(index)}
+                                                    disabled={isTransitioning}
+                                                    type="button"
+                                                    className={`h-2 rounded-full transition-all disabled:cursor-not-allowed ${
+                                                        index === currentCommitmentIndex ? 'bg-sky-600 w-8' : 'bg-gray-300 w-2'
+                                                    }`}
+                                                    aria-label={`Go to slide ${index + 1}`}
+                                                />
+                                            ))}
+                                        </div>
 
-                                        return (
-                                            <motion.div key={index} variants={scaleIn} className="relative">
-                                                <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                                                    <div className="flex items-center gap-4 mb-4">
-                                                        <motion.div
-                                                            whileHover={{ rotate: 360 }}
-                                                            transition={{ duration: 0.5 }}
-                                                            className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0"
-                                                        >
-                                                            <span className="text-xl font-bold text-white">{item.number}</span>
-                                                        </motion.div>
-                                                        <div className="bg-sky-100 p-3 rounded-xl">
-                                                            <Icon className="w-6 h-6 text-sky-600" />
-                                                        </div>
-                                                    </div>
-                                                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{item.title}</h3>
-                                                    {item.subtitle && (
-                                                        <p className="text-sm text-sky-600 uppercase tracking-wider mb-3">
-                                                            {item.subtitle}
-                                                        </p>
-                                                    )}
-                                                    <p className="text-slate-600 leading-relaxed">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            </motion.div>
-                                        )
-                                    })}
-                                </motion.div>
-                            </>
+                                        <button
+                                            onClick={handleNextSlide}
+                                            disabled={isTransitioning}
+                                            className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-sky-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            aria-label="Next slide"
+                                            type="button"
+                                        >
+                                            <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </motion.section>
             )}
 
-            {/* 7. CTA SECTION */}
+            {/* 7. CTA SECTION - PREMIUM 2026 REDESIGN */}
             {cta && (
                 <motion.section
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="px-6 py-16 md:py-24"
+                    className="px-6 py-24 md:py-32 relative overflow-hidden"
                 >
-                    <div className="max-w-5xl mx-auto">
-                        <motion.div
-                            variants={scaleIn}
-                            className="relative overflow-hidden bg-gradient-to-br from-sky-400 via-sky-500 to-sky-600 rounded-3xl shadow-2xl"
-                        >
+                    {/* Soft gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-blue-50 to-sky-100"></div>
+                    
+                    {/* Animated background blobs */}
+                    <motion.div
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            x: [0, 30, 0],
+                            y: [0, -20, 0]
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-0 right-0 w-96 h-96 bg-sky-200/30 rounded-full blur-3xl"
+                    ></motion.div>
+                    <motion.div
+                        animate={{ 
+                            scale: [1, 1.3, 1],
+                            x: [0, -40, 0],
+                            y: [0, 30, 0]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+                        className="absolute bottom-0 left-0 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl"
+                    ></motion.div>
+                    
+                    <div className="max-w-7xl mx-auto relative z-10">
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            {/* Content Side */}
                             <motion.div
-                                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.15, 0.1] }}
-                                transition={{ duration: 4, repeat: Infinity }}
-                                className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2"
-                            ></motion.div>
-                            <motion.div
-                                animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.15, 0.1] }}
-                                transition={{ duration: 4, repeat: Infinity, delay: 2 }}
-                                className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full translate-y-1/2 -translate-x-1/2"
-                            ></motion.div>
-
-                            <motion.div
-                                className="relative px-8 py-16 md:px-16 md:py-20 text-center"
+                                className="space-y-8"
                                 variants={staggerContainer}
                             >
                                 {cta.badge && (
-                                    <motion.div variants={fadeIn} className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-                                        <span className="text-white font-medium">{cta.badge}</span>
+                                    <motion.div 
+                                        variants={fadeIn} 
+                                        className="inline-block px-5 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-sky-100"
+                                    >
+                                        <span className="text-sky-600 font-semibold text-sm uppercase tracking-wider">{cta.badge}</span>
                                     </motion.div>
                                 )}
 
-                                <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold text-white mb-6">
-                                    {cta.title}
+                                <motion.h2 
+                                    variants={fadeInUp} 
+                                    className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight"
+                                >
+                                    {cta.title || "Ready to transform your smile?"}
                                 </motion.h2>
 
                                 {cta.description && (
-                                    <motion.p variants={fadeInUp} className="text-xl text-sky-50 mb-10 max-w-2xl mx-auto">
+                                    <motion.p 
+                                        variants={fadeInUp} 
+                                        className="text-xl md:text-2xl text-slate-600 leading-relaxed max-w-xl"
+                                    >
                                         {cta.description}
                                     </motion.p>
                                 )}
 
                                 <motion.div
-                                    className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                                    className="flex flex-col sm:flex-row gap-4 pt-4"
                                     variants={staggerContainer}
                                 >
                                     {cta.primaryButtonText && (
-                                        <motion.div variants={scaleIn} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
+                                        <motion.div 
+                                            variants={scaleIn} 
+                                            whileHover={{ scale: 1.05, y: -4 }} 
+                                            whileTap={{ scale: 0.98 }}
+                                        >
                                             <Link
                                                 href={cta.primaryButtonLink || '#'}
-                                                className="group px-8 py-4 bg-white text-sky-600 rounded-full shadow-xl hover:shadow-2xl transition-all flex items-center gap-3 font-semibold"
+                                                className="group relative px-8 py-5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 font-bold text-lg overflow-hidden"
                                             >
-                                                <Calendar className="w-5 h-5" />
-                                                <span className="text-lg">{cta.primaryButtonText}</span>
-                                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                                {/* Button glow effect */}
+                                                <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+                                                
+                                                <Calendar className="w-6 h-6 relative z-10" />
+                                                <span className="relative z-10">{cta.primaryButtonText}</span>
+                                                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
                                             </Link>
                                         </motion.div>
                                     )}
 
                                     {cta.secondaryButtonText && (
-                                        <motion.div variants={scaleIn} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                        <motion.div 
+                                            variants={scaleIn} 
+                                            whileHover={{ scale: 1.05 }} 
+                                            whileTap={{ scale: 0.98 }}
+                                        >
                                             <Link
                                                 href={cta.secondaryButtonLink || '#'}
-                                                className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-full hover:bg-white/10 transition-all flex items-center gap-2 font-semibold"
+                                                className="px-8 py-5 bg-white/80 backdrop-blur-md text-slate-900 border-2 border-slate-200 rounded-full hover:bg-white hover:border-sky-300 hover:shadow-lg transition-all duration-300 flex items-center gap-2 font-semibold text-lg"
                                             >
-                                                <span className="text-lg">{cta.secondaryButtonText}</span>
+                                                <span>{cta.secondaryButtonText}</span>
                                             </Link>
                                         </motion.div>
                                     )}
                                 </motion.div>
 
                                 {cta.contactInfo && cta.contactInfo.length > 0 && (
-                                    <motion.div variants={fadeIn} className="mt-12 pt-8 border-t border-white/20">
-                                        <div className="flex flex-col md:flex-row gap-6 justify-center items-center text-white/90">
-                                            {cta.contactInfo.map((info: any, index: number) => (
-                                                <motion.div
-                                                    key={index}
-                                                    whileHover={{ scale: 1.05 }}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    {index > 0 && <div className="hidden md:block w-px h-6 bg-white/20 mr-6"></div>}
-                                                    <span>{info.text}</span>
-                                                </motion.div>
-                                            ))}
-                                        </div>
+                                    <motion.div 
+                                        variants={fadeIn} 
+                                        className="pt-8 flex flex-wrap gap-6 text-slate-600"
+                                    >
+                                        {cta.contactInfo.map((info: any, index: number) => (
+                                            <motion.div
+                                                key={index}
+                                                whileHover={{ scale: 1.05 }}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <span className="text-base">{info.text}</span>
+                                            </motion.div>
+                                        ))}
                                     </motion.div>
                                 )}
                             </motion.div>
-                        </motion.div>
+
+                            {/* Image Side */}
+                            <motion.div
+                                variants={scaleIn}
+                                className="relative"
+                            >
+                                {/* Glassmorphism card with image */}
+                                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                                    {/* Placeholder for dental clinic image */}
+                                    <div className="aspect-[4/3] bg-gradient-to-br from-sky-100 to-blue-100 relative">
+                                        {/* Image overlay gradient */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-sky-900/20 to-transparent"></div>
+                                        
+                                        {/* Placeholder content - replace with actual image */}
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="text-center space-y-4 p-8">
+                                                <Smile className="w-24 h-24 text-sky-400 mx-auto opacity-50" />
+                                                <p className="text-slate-500 text-sm">
+                                                    Replace with smiling patient image
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Floating badge */}
+                                    <motion.div
+                                        animate={{ y: [0, -10, 0] }}
+                                        transition={{ duration: 3, repeat: Infinity }}
+                                        className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-600 rounded-full flex items-center justify-center">
+                                                <Star className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div>
+                                                <p className="text-2xl font-bold text-slate-900">4.9/5</p>
+                                                <p className="text-sm text-slate-600">Patient Rating</p>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                </div>
+
+                                {/* Decorative elements */}
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -top-6 -right-6 w-24 h-24 bg-sky-200/50 rounded-full blur-xl"
+                                ></motion.div>
+                                <motion.div
+                                    animate={{ rotate: -360 }}
+                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-200/50 rounded-full blur-xl"
+                                ></motion.div>
+                            </motion.div>
+                        </div>
                     </div>
                 </motion.section>
             )}
