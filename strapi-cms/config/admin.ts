@@ -39,4 +39,23 @@ export default ({ env }) => ({
       },
     },
   },
+  // Vite configuration for admin panel
+  vite: (config) => {
+    // Determine if we're using Cloudflare tunnel
+    const isCloudflare = env('CLOUDFLARE_TUNNEL_HOST') && 
+                         env('CLOUDFLARE_TUNNEL_HOST') !== 'localhost';
+    
+    return {
+      ...config,
+      server: {
+        ...config.server,
+        host: env('HOST', '0.0.0.0'),
+        strictPort: false,
+        // Disable HMR when using Cloudflare tunnel to prevent connection issues
+        hmr: isCloudflare ? false : true,
+        // Allow all hosts for Cloudflare tunnels
+        allowedHosts: true,
+      },
+    };
+  },
 });

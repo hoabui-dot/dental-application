@@ -79,6 +79,23 @@ export interface HomepageBeforeAfterCase extends Struct.ComponentSchema {
   };
 }
 
+export interface HomepageBlogCollectionSection extends Struct.ComponentSchema {
+  collectionName: 'components_homepage_blog_collection_sections';
+  info: {
+    description: 'Blog collection grid section';
+    displayName: 'BlogCollectionSection';
+  };
+  attributes: {
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    layout: Schema.Attribute.Enumeration<['grid_2', 'grid_3', 'grid_4']> &
+      Schema.Attribute.DefaultTo<'grid_3'>;
+    posts: Schema.Attribute.Relation<'oneToMany', 'api::blog.blog'>;
+    showFeatured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface HomepageCertificationItem extends Struct.ComponentSchema {
   collectionName: 'components_homepage_certification_items';
   info: {
@@ -406,6 +423,7 @@ declare module '@strapi/strapi' {
       'homepage.about': HomepageAbout;
       'homepage.before-after': HomepageBeforeAfter;
       'homepage.before-after-case': HomepageBeforeAfterCase;
+      'homepage.blog-collection-section': HomepageBlogCollectionSection;
       'homepage.certification-item': HomepageCertificationItem;
       'homepage.cta': HomepageCta;
       'homepage.doctor': HomepageDoctor;
