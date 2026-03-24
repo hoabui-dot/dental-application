@@ -37,7 +37,7 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
       `${STRAPI_URL}/api/blogs?filters[slug][$eq]=${slug}&populate=*`,
       {
         headers,
-        next: { revalidate: 60 },
+        cache: 'no-store'
       }
     );
 
@@ -47,7 +47,7 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
     }
 
     const data = await response.json();
-    
+
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -73,7 +73,7 @@ async function getAllBlogSlugs(): Promise<string[]> {
       `${STRAPI_URL}/api/blogs?fields[0]=slug`,
       {
         headers,
-        next: { revalidate: 3600 },
+        cache: 'no-store'
       }
     );
 
@@ -94,10 +94,10 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
@@ -114,10 +114,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPostPage({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export default async function BlogPostPage({
+  params
+}: {
+  params: Promise<{ slug: string }>
 }) {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
@@ -232,3 +232,6 @@ export default async function BlogPostPage({
     </main>
   );
 }
+
+export const revalidate = false; // Webhook-based revalidation
+export const dynamicParams = true;

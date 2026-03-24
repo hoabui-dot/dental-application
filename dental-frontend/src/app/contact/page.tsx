@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ContactPageClient from './ContactPageClient';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 
 async function getContactPageData() {
   try {
@@ -10,25 +11,24 @@ async function getContactPageData() {
       `${STRAPI_URL}/api/pages?filters[slug][$eq]=contact`,
       {
         headers: {
-          'Authorization': `Bearer ${process.env.STRAPI_API_TOKEN}`
+          'Authorization': `Bearer ${STRAPI_TOKEN}`
         },
-        next: { revalidate: 60 }
+        cache: 'no-store'
       }
     );
 
     if (!res.ok) {
-      console.error('Failed to fetch contact page:', res.status, res.statusText);
       return null;
     }
 
     const data = await res.json();
-    
+
     if (!data.data || data.data.length === 0) {
       return null;
     }
 
     const page = data.data[0];
-    
+
     // Parse the content JSON
     let content = {};
     if (page.content) {
@@ -40,13 +40,12 @@ async function getContactPageData() {
           content = page.content;
         }
       } catch (e) {
-        console.error('Failed to parse page content:', e);
+        return null;
       }
     }
 
     return content;
   } catch (error) {
-    console.error('Error fetching contact page:', error);
     return null;
   }
 }
@@ -67,3 +66,6 @@ export default async function ContactPage() {
 
   return <ContactPageClient content={content} />;
 }
+
+export const revalidate = false; // Webhook-based revalidation
+export const dynamicParams = true;

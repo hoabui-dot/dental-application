@@ -31,7 +31,7 @@ async function getServiceBySlug(slug: string): Promise<ServicePage | null> {
       `${STRAPI_URL}/api/pages?filters[slug][$eq]=${slug}&populate=*`,
       {
         headers,
-        next: { revalidate: 60 },
+        cache: 'no-store'
       }
     );
 
@@ -41,7 +41,7 @@ async function getServiceBySlug(slug: string): Promise<ServicePage | null> {
     }
 
     const data = await response.json();
-    
+
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -67,7 +67,7 @@ async function getAllServiceSlugs(): Promise<string[]> {
       `${STRAPI_URL}/api/pages?filters[slug][$in]=implant,invisalign,veneer,whitening&fields[0]=slug`,
       {
         headers,
-        next: { revalidate: 3600 },
+        cache: 'no-store'
       }
     );
 
@@ -88,10 +88,10 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params;
   const service = await getServiceBySlug(slug);
@@ -108,10 +108,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function ServicePage({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export default async function ServicePage({
+  params
+}: {
+  params: Promise<{ slug: string }>
 }) {
   const { slug } = await params;
   const service = await getServiceBySlug(slug);
@@ -132,3 +132,6 @@ export default async function ServicePage({
 
   return <ServicePageClient service={service} serviceData={serviceData} />;
 }
+
+export const revalidate = false; // Webhook-based revalidation
+export const dynamicParams = true;

@@ -57,9 +57,9 @@ async function fetchBlogs(): Promise<BlogPost[]> {
 
     const response = await fetch(
       `${STRAPI_URL}/api/blogs?populate=*&sort=publishedAt:desc&pagination[limit]=50`,
-      { 
+      {
         headers,
-        next: { revalidate: 300 } // Revalidate every 5 minutes
+        cache: 'no-store'
       }
     );
 
@@ -88,9 +88,9 @@ async function fetchNewsPageContent(): Promise<NewsPageContent | null> {
 
     const response = await fetch(
       `${STRAPI_URL}/api/pages?filters[slug][$eq]=news-listing&populate=*`,
-      { 
+      {
         headers,
-        next: { revalidate: 3600 } // Revalidate every hour
+        cache: 'no-store'
       }
     );
 
@@ -104,7 +104,7 @@ async function fetchNewsPageContent(): Promise<NewsPageContent | null> {
       const pageData = data.data[0];
       return JSON.parse(pageData.content);
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error fetching news page content:', error);
@@ -115,7 +115,7 @@ async function fetchNewsPageContent(): Promise<NewsPageContent | null> {
 export default async function NewsPage() {
   const blogs = await fetchBlogs();
   const pageContent = await fetchNewsPageContent();
-  
+
   // If page content is not found, show error
   if (!pageContent) {
     return (
@@ -132,12 +132,12 @@ export default async function NewsPage() {
       </div>
     );
   }
-  
+
   const featuredBlog = blogs[0];
   const popularBlogs = blogs.slice(0, 3);
 
   return (
-    <NewsPageClient 
+    <NewsPageClient
       initialBlogs={blogs}
       featuredBlog={featuredBlog}
       popularBlogs={popularBlogs}
@@ -146,3 +146,6 @@ export default async function NewsPage() {
     />
   );
 }
+
+export const revalidate = false; // Webhook-based revalidation
+export const dynamicParams = true;

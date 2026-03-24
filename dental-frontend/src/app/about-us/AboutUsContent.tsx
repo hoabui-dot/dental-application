@@ -423,7 +423,7 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                     {coreValues.values && (
                         <>
                             <div className="hidden md:block">
-                                <div className="relative max-w-4xl mx-auto h-96">
+                                <div className="relative max-w-4xl mx-auto h-[600px]">
                                     <motion.div
                                         variants={scaleIn}
                                         whileHover={{ scale: 1.05, rotate: 5 }}
@@ -438,9 +438,9 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                                     {coreValues.values.map((value: any, index: number) => {
                                         const Icon = iconMap[value.icon] || Heart
                                         const positions = [
-                                            'top-0 left-1/2 -translate-x-1/2 -translate-y-12',
-                                            'bottom-0 left-0 translate-y-12',
-                                            'bottom-0 right-0 translate-y-12'
+                                            'top-0 left-1/2 -translate-x-1/2 -translate-y-0',
+                                            'bottom-0 left-0 translate-y-0',
+                                            'bottom-0 right-0 translate-y-0'
                                         ]
                                         return (
                                             <motion.div

@@ -54,7 +54,7 @@ async function getServicesListingData(): Promise<ServicesListingData | null> {
       `${STRAPI_URL}/api/pages?filters[slug][$eq]=services-listing`,
       {
         headers,
-        next: { revalidate: 3600 },
+        cache: 'no-store'
       }
     );
 
@@ -64,20 +64,20 @@ async function getServicesListingData(): Promise<ServicesListingData | null> {
     }
 
     const data = await response.json();
-    
+
     if (!data.data || data.data.length === 0) {
       return null;
     }
 
     const pageData = data.data[0];
-    
+
     // Parse content JSON
     if (pageData.content && typeof pageData.content === 'string') {
       return JSON.parse(pageData.content);
     } else if (pageData.content && typeof pageData.content === 'object') {
       return pageData.content;
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error fetching services listing:', error);
@@ -92,13 +92,13 @@ export const metadata = {
 
 export default async function ServicesPage() {
   const listingData = await getServicesListingData();
-  
+
   // Fallback data if API fails
   const hero = listingData?.hero || {
     title: 'Dịch vụ nha khoa chuyên nghiệp',
     description: 'Chúng tôi cung cấp đa dạng các dịch vụ nha khoa với công nghệ hiện đại và đội ngũ bác sĩ giàu kinh nghiệm'
   };
-  
+
   const services = listingData?.services || [];
   const cta = listingData?.cta;
   const features = listingData?.features || [];
@@ -112,11 +112,11 @@ export default async function ServicesPage() {
             <div className="inline-block px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-medium mb-6">
               Dịch vụ nha khoa
             </div>
-            
+
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-6">
               {hero.title}
             </h1>
-            
+
             <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
               {hero.description}
             </p>
@@ -135,27 +135,27 @@ export default async function ServicesPage() {
             >
               {/* Background Gradient */}
               <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`} />
-              
+
               {/* Content */}
               <div className="relative">
                 {/* Icon */}
                 <div className="text-6xl mb-6">{service.icon}</div>
-                
+
                 {/* Title */}
                 <h2 className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-sky-500 transition-colors">
                   {service.title}
                 </h2>
-                
+
                 {/* English Title */}
                 <p className="text-sm text-gray-500 mb-4">
                   {service.titleEn}
                 </p>
-                
+
                 {/* Description */}
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   {service.description}
                 </p>
-                
+
                 {/* CTA */}
                 <div className="inline-flex items-center gap-2 text-sky-500 font-medium group-hover:gap-4 transition-all">
                   <span>Tìm hiểu thêm</span>
@@ -219,3 +219,6 @@ export default async function ServicesPage() {
     </main>
   );
 }
+
+export const revalidate = false; // Webhook-based revalidation
+export const dynamicParams = true;
