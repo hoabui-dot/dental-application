@@ -82,7 +82,7 @@ async function createNewsPage() {
 
       await client.query(
         `UPDATE pages 
-         SET title = $1, description = $2, content = $3, updated_at = NOW(), published_at = NOW()
+         SET title = $1, description = $2, content = $3, locale = 'en', updated_at = NOW(), published_at = NOW()
          WHERE slug = $4`,
         [
           newsPageData.title,
@@ -102,9 +102,9 @@ async function createNewsPage() {
 
       const result = await client.query(
         `INSERT INTO pages (
-          document_id, title, slug, description, content, 
+          document_id, title, slug, description, content, locale,
           published_at, created_at, updated_at, created_by_id, updated_by_id
-        ) VALUES ($1, $2, $3, $4, $5, NOW(), NOW(), NOW(), 1, 1)
+        ) VALUES ($1, $2, $3, $4, $5, 'en', NOW(), NOW(), NOW(), 1, 1)
         RETURNING id, document_id`,
         [
           documentId,
