@@ -1,76 +1,78 @@
-# Solution: Recreate Page in Strapi Admin
+# Solution: News Page Not Visible in Strapi Admin UI
+
+## Problem
+The news-listing page exists in the database and is accessible via API, but is not visible in the Strapi admin Content Manager UI.
 
 ## Root Cause
+**Pagination Issue**: The Strapi admin panel has a default "Entries per page" setting of 5, but there are 12 total pages in the database. The news-listing page (ID: 27) is at the end of the list and appears on page 2 or 3 of the pagination.
 
-The page was created while the schema was being modified, causing a mismatch between:
-- Database structure (has locale column)
-- Strapi's internal query logic (expects specific locale handling)
-- Schema configuration (i18n disabled but plugin still active)
+## Database Status
+```
+Total pages: 12
+- Published: 7
+- Drafts: 5
 
-## Solution: Delete and Recreate Page
+Page IDs: 2, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
 
-### Step 1: Delete Existing Page from Database
+news-listing page:
+- ID: 27 (last page in database)
+- Document ID: news-1774333280752
+- Published: YES (2026-03-24T00:08:11.234Z)
+- Locale: NULL (same as all other pages)
+- All metadata present and correct
+```
 
+## Solution Steps
+
+### Option 1: Change Pagination Settings (Recommended)
+1. Go to Strapi admin: http://localhost:1337/admin/content-manager/collection-types/api::page.page
+2. Look at the bottom of the page list
+3. Find the "Entries per page" dropdown (currently set to 5)
+4. Change it to 10 or 25
+5. The news-listing page should now be visible
+
+### Option 2: Use Pagination Controls
+1. Scroll to the bottom of the page list
+2. Look for pagination controls (Page 1, 2, 3, etc.)
+3. Click on page 2 or 3
+4. The news-listing page should appear
+
+### Option 3: Use Search
+1. In the Strapi admin Content Manager
+2. Use the search box at the top
+3. Search for "news-listing" or "News & Blog"
+4. The page should appear in search results
+
+### Option 4: Hard Refresh Browser
+1. Press Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+2. This clears any cached admin panel state
+3. Then try the pagination options above
+
+## Verification
+The page is confirmed to be:
+- ✅ In the database (ID: 27)
+- ✅ Published (published_at set)
+- ✅ Has all required metadata (created_at, updated_at)
+- ✅ Accessible via API
+- ✅ Has correct structure (same as services-listing)
+- ✅ Frontend can fetch and display it
+
+## API Access
+The page is accessible via:
 ```bash
-docker exec -it strapi-postgres psql -U postgres -d dental_cms_strapi -c "DELETE FROM pages WHERE slug = 'test-page';"
+curl -H "Authorization: Bearer <token>" \
+  "https://pediatric-expired-through-casinos.trycloudflare.com/api/pages?filters[slug][$eq]=news-listing"
 ```
 
-### Step 2: Restart Strapi
+## Next Steps
+1. Check the Strapi admin UI pagination controls
+2. Change "Entries per page" to 10 or 25
+3. Verify the news-listing page is now visible
+4. Edit the page content as needed in the admin panel
 
-```bash
-cd strapi-cms
-# Ctrl+C to stop
-npm run develop
-```
-
-### Step 3: Create Page in Strapi Admin (NOT database)
-
-1. Open http://localhost:1337/admin
-2. Go to **Content Manager** → **Page**
-3. Click **Create new entry**
-4. Fill in:
-   - **Title:** Test Page
-   - **Slug:** test-page (auto-fills)
-   - **Content:** Hello from preview mode!
-5. Click **Save** (keep as draft, don't publish)
-
-### Step 4: Test Preview
-
-```
-http://localhost:3000/api/preview?slug=test-page&secret=your-secure-preview-secret-change-in-production
-```
-
-## Why This Works
-
-When you create a page through Strapi admin:
-- ✅ Strapi handles all locale/i18n logic correctly
-- ✅ All required fields are populated properly
-- ✅ Internal indexes are updated
-- ✅ The page is queryable through the API
-
-When you manually insert/update in the database:
-- ❌ Strapi's internal state may not match
-- ❌ Locale handling may be incorrect
-- ❌ Indexes may not be updated
-
-## Alternative: Publish Then Unpublish
-
-If recreating doesn't work, try this workflow:
-
-1. Create page in Strapi admin
-2. **Publish it first**
-3. Make changes
-4. **Save without publishing** (now it's draft with changes)
-5. Test preview - should show draft version
-
-## Test API After Recreation
-
-```bash
-# Should return the page
-curl -H "Authorization: Bearer YOUR_TOKEN" \
-  "http://localhost:1337/api/pages?publicationState=preview"
-```
-
----
-
-**TL;DR:** Delete the page from database, restart Strapi, create page through Strapi admin UI (not database), test preview.
+## Technical Details
+- Strapi Version: v5 (uses document system)
+- Database: PostgreSQL at 100.68.50.41:5437
+- All pages have locale=NULL (this is correct and consistent)
+- The admin UI default pagination is 5 entries per page
+- This is a UI display issue, not a database or API issue

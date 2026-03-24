@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import type { HomepageTestimonialsBlock } from '@/src/types/strapi'
 
 interface TestimonialsBlockProps {
@@ -34,19 +35,30 @@ export function TestimonialsBlock({ data }: TestimonialsBlockProps) {
   return (
     <section className="py-20 bg-linear-to-b from-sky-50 to-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {data.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Authentic stories from patients whose smiles—and confidence—have been transformed.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           {currentTestimonials.map((testimonial, index) => (
-            <div
+            <motion.div
               key={testimonial.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
             >
               <div className="w-12 h-12 bg-sky-100 rounded-2xl flex items-center justify-center mb-6">
@@ -75,12 +87,14 @@ export function TestimonialsBlock({ data }: TestimonialsBlockProps) {
                   <div className="font-semibold text-gray-900">{testimonial.name}</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         <div className="flex items-center justify-center gap-4">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={prevPage}
             className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-sky-50 transition-colors"
             aria-label="Previous testimonials"
@@ -88,7 +102,7 @@ export function TestimonialsBlock({ data }: TestimonialsBlockProps) {
             <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-          </button>
+          </motion.button>
 
           <div className="flex gap-2">
             {[...Array(totalPages)].map((_, index) => (
@@ -103,7 +117,9 @@ export function TestimonialsBlock({ data }: TestimonialsBlockProps) {
             ))}
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={nextPage}
             className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-sky-50 transition-colors"
             aria-label="Next testimonials"
@@ -111,7 +127,7 @@ export function TestimonialsBlock({ data }: TestimonialsBlockProps) {
             <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </div>
     </section>

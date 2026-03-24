@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import type { HomepageAboutBlock } from '@/src/types/strapi'
 
 /**
@@ -24,7 +27,13 @@ export function AboutBlock({ data }: AboutBlockProps) {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
+          >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               {data.title}
             </h2>
@@ -32,11 +41,17 @@ export function AboutBlock({ data }: AboutBlockProps) {
             <div className="text-base md:text-lg text-foreground-secondary leading-relaxed whitespace-pre-line">
               {data.content}
             </div>
-          </div>
+          </motion.div>
 
           {/* Image */}
           {data.image && (
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl"
+            >
               <Image
                 src={data.image.url}
                 alt={data.image.alt}
@@ -44,7 +59,7 @@ export function AboutBlock({ data }: AboutBlockProps) {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

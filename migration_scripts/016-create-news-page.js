@@ -102,9 +102,9 @@ async function createNewsPage() {
 
       const result = await client.query(
         `INSERT INTO pages (
-          document_id, title, slug, description, content, locale,
+          document_id, title, slug, description, content, 
           published_at, created_at, updated_at, created_by_id, updated_by_id
-        ) VALUES ($1, $2, $3, $4, $5, 'en', NOW(), NOW(), NOW(), 1, 1)
+        ) VALUES ($1, $2, $3, $4, $5, NOW(), NOW(), NOW(), 1, 1)
         RETURNING id, document_id`,
         [
           documentId,

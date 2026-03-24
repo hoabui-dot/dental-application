@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { Button } from '@/src/components/ui/button'
 import type { HomepageHeroBlock } from '@/src/types/strapi'
 
@@ -27,7 +30,12 @@ export function HeroBlock({ data }: HeroBlockProps) {
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Text Content */}
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
+          >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               {data.heading}
             </h1>
@@ -41,18 +49,25 @@ export function HeroBlock({ data }: HeroBlockProps) {
             {/* CTA Button */}
             {data.ctaLabel && data.ctaLink && (
               <div className="pt-4">
-                <Button asChild size="lg" variant="primary">
-                  <Link href={data.ctaLink}>
-                    {data.ctaLabel}
-                  </Link>
-                </Button>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button asChild size="lg" variant="primary">
+                    <Link href={data.ctaLink}>
+                      {data.ctaLabel}
+                    </Link>
+                  </Button>
+                </motion.div>
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Hero Image */}
           {data.image && (
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl"
+            >
               <Image
                 src={data.image.url}
                 alt={data.image.alt}
@@ -61,7 +76,7 @@ export function HeroBlock({ data }: HeroBlockProps) {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

@@ -1,3 +1,6 @@
+'use client'
+
+import { motion } from 'framer-motion'
 import type { HomepageServicesBlock } from '@/src/types/strapi'
 
 interface ServicesBlockProps {
@@ -63,7 +66,13 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
   return (
     <section className="py-20 bg-white" id="services">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {data.title}
           </h2>
@@ -72,16 +81,21 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
               {data.description}
             </p>
           )}
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {data.items.map((service, index) => {
             const icon = serviceIcons[index % serviceIcons.length]
             
             return (
-              <div
+              <motion.div
                 key={service.id}
-                className="group bg-linear-to-br from-white to-sky-50 rounded-3xl p-8 border border-sky-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
+                className="group bg-linear-to-br from-white to-sky-50 rounded-3xl p-8 border border-sky-100 hover:shadow-2xl transition-all duration-300 cursor-pointer"
               >
                 <div className="w-16 h-16 bg-linear-to-br from-sky-400 to-sky-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   {icon.svg}
@@ -92,16 +106,26 @@ export function ServicesBlock({ data }: ServicesBlockProps) {
                   Learn more
                   <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
                 </button>
-              </div>
+              </motion.div>
             )
           })}
         </div>
 
-        <div className="text-center mt-12">
-          <button className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-4 text-lg rounded-full font-semibold transition-colors">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-4 text-lg rounded-full font-semibold transition-colors"
+          >
             Show all services
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   )
