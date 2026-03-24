@@ -1,11 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
     Award, TrendingUp, Users, Scan, UserCheck, FileText, Sofa,
     Lightbulb, Shield, Heart, Smile, Star, Sprout, Calendar, ArrowRight
 } from 'lucide-react'
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://pediatric-expired-through-casinos.trycloudflare.com'
 
 interface AboutUsContentProps {
     content: any
@@ -96,12 +99,40 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                             variants={staggerContainer}
                         >
                             <div className="space-y-4">
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-100 h-64"></motion.div>
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-50 h-48"></motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-64">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/dental_team_db6d3d4f6f.jpg`}
+                                        alt="Dental clinic team"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-48">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/patient_consultation_dcf1a32d50.jpg`}
+                                        alt="Patient consultation"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
                             </div>
                             <div className="space-y-4 pt-8">
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-50 h-48"></motion.div>
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-100 h-64"></motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-48">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/clinic_interior_205c275757.jpg`}
+                                        alt="Modern clinic interior"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-64">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/happy_patient_3d6d7753d6.jpg`}
+                                        alt="Happy patient"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
                             </div>
                         </motion.div>
                     </div>
@@ -119,7 +150,14 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                     <div className="max-w-7xl mx-auto">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <motion.div variants={fadeInUp} className="relative">
-                                <div className="rounded-3xl overflow-hidden shadow-2xl bg-sky-100 h-96"></div>
+                                <div className="rounded-3xl overflow-hidden shadow-2xl relative h-96">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/achievements_0a8d515d49.jpg`}
+                                        alt="Achievements and certifications"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
                                 <motion.div
                                     variants={scaleIn}
                                     className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-xl"
@@ -236,12 +274,40 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                             variants={staggerContainer}
                         >
                             <div className="space-y-4">
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-100 h-56"></motion.div>
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-50 h-40"></motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-56">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/dental_technology_127ddfeaa3.jpg`}
+                                        alt="Dental technology"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-40">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/patient_consultation_9a28199a36.jpg`}
+                                        alt="Patient care"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
                             </div>
                             <div className="space-y-4 pt-8">
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-50 h-40"></motion.div>
-                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg bg-sky-100 h-56"></motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-40">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/happy_patient_afecb1a4d6.jpg`}
+                                        alt="Happy patient"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
+                                <motion.div variants={scaleIn} className="rounded-3xl overflow-hidden shadow-lg relative h-56">
+                                    <Image
+                                        src={`${STRAPI_URL}/uploads/clinic_interior_446d260b23.jpg`}
+                                        alt="Clinic interior"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </motion.div>
                             </div>
                         </motion.div>
                     </div>
@@ -260,7 +326,14 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <motion.div variants={fadeInUp} className="order-2 md:order-1">
                                 <div className="relative">
-                                    <div className="rounded-3xl overflow-hidden shadow-2xl bg-sky-100 h-96"></div>
+                                    <div className="rounded-3xl overflow-hidden shadow-2xl relative h-96">
+                                        <Image
+                                            src={`${STRAPI_URL}/uploads/dental_consultation_d555f4a87c.jpg`}
+                                            alt="Dental philosophy"
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
                                     <motion.div
                                         animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
                                         transition={{ duration: 3, repeat: Infinity }}

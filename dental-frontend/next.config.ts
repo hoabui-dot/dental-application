@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
             }
           })()
         : []),
+      // Cloudflare tunnel domain
+      {
+        protocol: "https",
+        hostname: "*.trycloudflare.com",
+      },
       // Fallback for local development
       {
         protocol: "http",
