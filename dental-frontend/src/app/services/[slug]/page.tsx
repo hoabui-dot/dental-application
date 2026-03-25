@@ -75,12 +75,12 @@ export async function generateMetadata({
 
   if (!service) {
     return {
-      title: 'Dịch vụ không tìm thấy',
+      title: 'Service Not Found',
     };
   }
 
   return {
-    title: `${service.title} | Nha Khoa Quốc Tế Sài Gòn`,
+    title: `${service.title} | Saigon International Dental Clinic`,
     description: service.description || service.title,
   };
 }

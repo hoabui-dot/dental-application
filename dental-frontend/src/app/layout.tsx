@@ -24,10 +24,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Nha Khoa Quốc Tế Sài Gòn',
-    default: 'Nha Khoa Quốc Tế Sài Gòn - Dịch Vụ Nha Khoa Chuyên Nghiệp',
+    template: '%s | Saigon International Dental Clinic',
+    default: 'Saigon International Dental Clinic - Professional Dental Services',
   },
-  description: 'Dịch vụ nha khoa chuyên nghiệp bao gồm cấy ghép implant, tẩy trắng răng và niềng răng',
+  description: 'Professional dental services including dental implants, teeth whitening, and braces',
   icons: {
     icon: 'https://pediatric-expired-through-casinos.trycloudflare.com/uploads/logo_37125485af.png',
     shortcut: 'https://pediatric-expired-through-casinos.trycloudflare.com/uploads/logo_37125485af.png',

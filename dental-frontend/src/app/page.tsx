@@ -40,8 +40,8 @@ export default async function Home() {
 
 // Metadata
 export const metadata = {
-  title: 'Nha Khoa Quốc Tế Sài Gòn - Nụ cười hoàn hảo',
-  description: 'Chăm sóc răng miệng chuyên nghiệp với công nghệ hiện đại và đội ngũ bác sĩ giàu kinh nghiệm.',
+  title: 'Saigon International Dental Clinic - Perfect Smile',
+  description: 'Professional dental care with modern technology and experienced doctors.',
 }
 
 // On-demand revalidation via webhooks (no time-based revalidation)

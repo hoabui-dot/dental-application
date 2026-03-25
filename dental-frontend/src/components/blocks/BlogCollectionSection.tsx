@@ -143,7 +143,7 @@ export default function BlogCollectionSection({
                         })}
                       </time>
                       <span className="text-primary-600 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                        Đọc thêm
+                        Read More
                         <svg 
                           className="w-4 h-4" 
                           fill="none" 
