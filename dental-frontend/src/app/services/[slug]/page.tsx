@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ServicePageClient from './ServicePageClient';
+import { apiClient } from '@/src/lib/api/client';
 
 interface ServicePage {
   id: number;
@@ -14,39 +15,27 @@ interface ServicePage {
   updatedAt: string;
 }
 
-const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+interface StrapiResponse {
+  data: ServicePage[];
+  meta?: any;
+}
 
 async function getServiceBySlug(slug: string): Promise<ServicePage | null> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiResponse>('/api/pages', {
+      params: {
+        'filters[slug][$eq]': slug,
+        populate: '*',
+      },
+      isDraftMode: false,
+      tags: ['pages', `page-${slug}`], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$eq]=${slug}&populate=*`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      console.error('Failed to fetch service:', response.statusText);
+    if (!response.data || response.data.length === 0) {
       return null;
     }
 
-    const data = await response.json();
-
-    if (!data.data || data.data.length === 0) {
-      return null;
-    }
-
-    return data.data[0];
+    return response.data[0];
   } catch (error) {
     console.error('Error fetching service:', error);
     return null;
@@ -55,28 +44,16 @@ async function getServiceBySlug(slug: string): Promise<ServicePage | null> {
 
 async function getAllServiceSlugs(): Promise<string[]> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiResponse>('/api/pages', {
+      params: {
+        'filters[slug][$in]': 'implant,invisalign,veneer,whitening',
+        'fields[0]': 'slug',
+      },
+      isDraftMode: false,
+      tags: ['pages'], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$in]=implant,invisalign,veneer,whitening&fields[0]=slug`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-    return data.data?.map((page: any) => page.slug) || [];
+    return response.data?.map((page) => page.slug) || [];
   } catch (error) {
     console.error('Error fetching service slugs:', error);
     return [];

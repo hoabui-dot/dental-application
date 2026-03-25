@@ -1,33 +1,36 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ContactPageClient from './ContactPageClient';
+import { apiClient } from '@/src/lib/api/client';
 
-const STRAPI_URL = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
+interface StrapiResponse {
+  data: Array<{
+    id: number;
+    documentId: string;
+    title: string;
+    slug: string;
+    content?: any;
+    publishedAt: string;
+  }>;
+  meta?: any;
+}
 
 async function getContactPageData() {
   try {
-    const res = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$eq]=contact`,
-      {
-        headers: {
-          'Authorization': `Bearer ${STRAPI_TOKEN}`
-        },
-        cache: 'no-store'
-      }
-    );
+    const response = await apiClient<StrapiResponse>('/api/pages', {
+      params: {
+        'filters[slug][$eq]': 'contact',
+      },
+      isDraftMode: false,
+      tags: ['pages', 'page-contact'], // Cache tags for webhook revalidation
+    });
 
-    if (!res.ok) {
+    if (!response.data || response.data.length === 0) {
+      console.error('[Contact Page] No data found');
       return null;
     }
 
-    const data = await res.json();
-
-    if (!data.data || data.data.length === 0) {
-      return null;
-    }
-
-    const page = data.data[0];
+    const page = response.data[0];
 
     // Parse the content JSON
     let content = {};
@@ -36,16 +39,28 @@ async function getContactPageData() {
         // Check if content is already an object or a string
         if (typeof page.content === 'string') {
           content = JSON.parse(page.content);
-        } else {
+        } else if (typeof page.content === 'object') {
           content = page.content;
         }
+        
+        // Validate that content has expected structure
+        if (!content || typeof content !== 'object') {
+          console.error('[Contact Page] Invalid content structure');
+          return null;
+        }
+        
       } catch (e) {
+        console.error('[Contact Page] Error parsing content:', e);
         return null;
       }
+    } else {
+      console.error('[Contact Page] No content field found');
+      return null;
     }
 
     return content;
   } catch (error) {
+    console.error('[Contact Page] Error fetching data:', error);
     return null;
   }
 }
@@ -64,7 +79,40 @@ export default async function ContactPage() {
     notFound();
   }
 
-  return <ContactPageClient content={content} />;
+  // Validate content structure
+  if (typeof content !== 'object' || content === null) {
+    console.error('[Contact Page] Invalid content type:', typeof content);
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Contact Page Error</h1>
+          <p className="text-gray-600 mb-4">
+            The contact page content is not properly configured.
+          </p>
+          <p className="text-sm text-gray-500">
+            Please check the CMS configuration or contact support.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Ensure we're passing a proper object to the client component
+  try {
+    return <ContactPageClient content={content} />;
+  } catch (error) {
+    console.error('[Contact Page] Error rendering client component:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Rendering Error</h1>
+          <p className="text-gray-600">
+            Unable to render the contact page. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 }
 
 export const revalidate = false; // Webhook-based revalidation

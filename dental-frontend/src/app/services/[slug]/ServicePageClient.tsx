@@ -7,7 +7,7 @@ import {
   Clock, TrendingUp, DollarSign, Award, Zap, Shield, Calendar,
   Smile, Star, Heart, CheckCircle, Sparkles,
   FileSearch, Wrench, Check, ChevronDown,
-  GraduationCap, Users, Phone, ArrowLeft
+  GraduationCap, Users, Phone, ArrowLeft, ArrowRight
 } from 'lucide-react';
 
 interface ServicePageClientProps {
@@ -37,11 +37,11 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-sm text-gray-600">
             <Link href="/" className="hover:text-sky-500 transition-colors">
-              Trang chủ
+              Home
             </Link>
             <span>/</span>
             <Link href="/services" className="hover:text-sky-500 transition-colors">
-              Dịch vụ
+              Services
             </Link>
             <span>/</span>
             <span className="text-gray-900 font-medium">{service.title}</span>
@@ -60,7 +60,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="space-y-6"
             >
               <div className="inline-block px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-medium">
-                Dịch vụ nha khoa
+                Dental Services
               </div>
               
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
@@ -76,7 +76,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                   <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-2xl shadow-sm">
                     <Clock className="w-5 h-5 text-sky-500" />
                     <div>
-                      <div className="text-xs text-gray-500">Thời gian</div>
+                      <div className="text-xs text-gray-500">Duration</div>
                       <div className="font-semibold text-gray-900">{hero.duration}</div>
                     </div>
                   </div>
@@ -86,7 +86,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                   <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-2xl shadow-sm">
                     <TrendingUp className="w-5 h-5 text-sky-500" />
                     <div>
-                      <div className="text-xs text-gray-500">Hồi phục</div>
+                      <div className="text-xs text-gray-500">Recovery</div>
                       <div className="font-semibold text-gray-900">{hero.recoveryTime}</div>
                     </div>
                   </div>
@@ -96,7 +96,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                   <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-2xl shadow-sm">
                     <DollarSign className="w-5 h-5 text-sky-500" />
                     <div>
-                      <div className="text-xs text-gray-500">Giá</div>
+                      <div className="text-xs text-gray-500">Price</div>
                       <div className="font-semibold text-gray-900">{hero.priceRange}</div>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                     href="/booking"
                     className="inline-block px-8 py-4 bg-sky-500 text-white rounded-2xl font-semibold shadow-lg shadow-sky-500/30 hover:bg-sky-600 transition-colors"
                   >
-                    Đặt lịch tư vấn
+                Book Consultation
                   </Link>
                 </motion.div>
                 
@@ -118,7 +118,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                     href="/contact"
                     className="inline-block px-8 py-4 bg-white text-gray-700 rounded-2xl font-semibold shadow-md hover:shadow-lg transition-shadow"
                   >
-                    Xem chi tiết
+                    View Details
                   </Link>
                 </motion.div>
               </div>
@@ -152,10 +152,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Award, title: 'Bác sĩ chuyên khoa', description: 'Đội ngũ giàu kinh nghiệm' },
-              { icon: Zap, title: 'Công nghệ tiên tiến', description: 'Trang thiết bị hiện đại' },
-              { icon: Shield, title: 'An toàn tuyệt đối', description: 'Quy trình chuẩn quốc tế' },
-              { icon: Calendar, title: 'Bảo hành dài hạn', description: 'Cam kết chất lượng' }
+              { icon: Award, title: 'Specialist Doctors', description: 'Experienced team' },
+              { icon: Zap, title: 'Advanced Technology', description: 'Modern equipment' },
+              { icon: Shield, title: 'Absolute Safety', description: 'International standards' },
+              { icon: Calendar, title: 'Long-term Warranty', description: 'Quality commitment' }
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -231,10 +231,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="text-center mb-12"
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Ưu điểm vượt trội
+                Outstanding Advantages
               </h2>
               <p className="text-lg text-gray-600">
-                Những lợi ích tuyệt vời mà dịch vụ mang lại cho bạn
+                Great benefits that our service brings to you
               </p>
             </motion.div>
 
@@ -280,10 +280,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="text-center mb-12"
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Quy trình điều trị
+                Treatment Process
               </h2>
               <p className="text-lg text-gray-600">
-                Từng bước thực hiện chuyên nghiệp và an toàn
+                Professional and safe step-by-step implementation
               </p>
             </motion.div>
 
@@ -324,7 +324,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                           
                           <div className="lg:text-center">
                             <div className="text-sm font-semibold text-sky-600 mb-2">
-                              Bước {index + 1}
+                              Step {index + 1}
                             </div>
                             <h3 className="font-bold text-gray-900 mb-2">
                               {step.title}
@@ -361,10 +361,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="text-center mb-12"
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Chi phí
+                Pricing
               </h2>
               <p className="text-lg text-gray-600">
-                Các gói dịch vụ phù hợp với nhu cầu của bạn
+                Service packages suitable for your needs
               </p>
             </motion.div>
 
@@ -383,7 +383,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                 >
                   {option.popular && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-sky-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      Phổ biến nhất
+                      Most Popular
                     </div>
                   )}
 
@@ -392,7 +392,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                       {option.name}
                     </h3>
                     <div className="text-sm text-gray-600 mb-4">
-                      Xuất xứ: {option.origin}
+                      Origin: {option.origin}
                     </div>
                     <div className="text-3xl font-bold text-sky-600">
                       {option.price}
@@ -402,7 +402,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                   <div className="mb-6 pb-6 border-b border-gray-200">
                     <div className="flex items-center gap-2 text-sm text-gray-700">
                       <Check className="w-4 h-4 text-green-500" />
-                      <span>Bảo hành: {option.warranty}</span>
+                      <span>Warranty: {option.warranty}</span>
                     </div>
                   </div>
 
@@ -423,7 +423,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                         : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                     }`}
                   >
-                    Chọn gói này
+                    Choose this package
                   </Link>
                 </motion.div>
               ))}
@@ -444,10 +444,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="text-center mb-12"
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Đội ngũ chuyên gia
+                Expert Team
               </h2>
               <p className="text-lg text-gray-600">
-                Bác sĩ giàu kinh nghiệm, tận tâm với từng bệnh nhân
+                Experienced doctors, dedicated to each patient
               </p>
             </motion.div>
 
@@ -480,7 +480,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
                   <div className="space-y-6 mb-8">
                     {doctor.credentials?.map((credential: string, index: number) => {
                       const icons = [GraduationCap, Award, Users, Users];
-                      const titles = ['Học vấn', 'Kinh nghiệm', 'Chứng chỉ', 'Thành tích'];
+                      const titles = ['Education', 'Experience', 'Certifications', 'Achievements'];
                       const IconComponent = icons[index] || Award;
                       
                       return (
@@ -506,7 +506,7 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
 
                   <div className="pt-6 border-t border-gray-200">
                     <p className="text-gray-600 italic leading-relaxed">
-                      "Sứ mệnh của chúng tôi là mang lại nụ cười tự tin và sức khỏe răng miệng tốt nhất cho mọi bệnh nhân bằng công nghệ tiên tiến và sự tận tâm."
+                      "Our mission is to bring confident smiles and the best oral health to every patient through advanced technology and dedication."
                     </p>
                   </div>
                 </div>
@@ -528,10 +528,10 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
               className="text-center mb-12"
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Câu hỏi thường gặp
+                Frequently Asked Questions
               </h2>
               <p className="text-lg text-gray-600">
-                Giải đáp những thắc mắc phổ biến của bệnh nhân
+                Answers to common patient questions
               </p>
             </motion.div>
 
@@ -562,55 +562,201 @@ export default function ServicePageClient({ service, serviceData }: ServicePageC
         </section>
       )}
 
-      {/* CTA Section with Animations */}
-      <section className="py-20 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-        </div>
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-8"
-          >
-            <h2 className="text-3xl lg:text-5xl font-bold text-white leading-tight">
-              Sẵn sàng cải thiện nụ cười của bạn?
-            </h2>
-            
-            <p className="text-xl text-sky-50 max-w-2xl mx-auto">
-              Đặt lịch tư vấn miễn phí với đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm của chúng tôi
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/booking"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-sky-600 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-shadow"
-                >
-                  <Calendar className="w-5 h-5" />
-                  Đặt lịch ngay
-                </Link>
+      {/* CTA Section - Premium 2026 Redesign */}
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        {/* Soft Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-sky-100 to-sky-400"></div>
+        
+        {/* Animated Background Blobs */}
+        <motion.div
+          animate={{ 
+            scale: [1, 1.2, 1],
+            x: [0, 30, 0],
+            y: [0, -20, 0]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 right-0 w-96 h-96 bg-sky-300/30 rounded-full blur-3xl"
+        ></motion.div>
+        <motion.div
+          animate={{ 
+            scale: [1, 1.3, 1],
+            x: [0, -40, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+          className="absolute bottom-0 left-0 w-80 h-80 bg-blue-300/30 rounded-full blur-3xl"
+        ></motion.div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Content Side */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              {/* Badge */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="inline-block px-5 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-sky-200"
+              >
+                <span className="text-sky-600 font-semibold text-sm uppercase tracking-wider">
+                  ✨ Special Offer
+                </span>
               </motion.div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-sky-700 text-white rounded-2xl font-semibold shadow-lg hover:bg-sky-800 transition-colors"
-                >
-                  <Phone className="w-5 h-5" />
-                  Gọi tư vấn: 0901 123 456
-                </Link>
-              </motion.div>
-            </div>
+              {/* Title */}
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+              >
+                Ready to improve your smile?
+              </motion.h2>
 
-            <div className="pt-6 text-sky-100 text-sm">
-              ⭐ Được tin tưởng bởi hơn 10,000+ khách hàng
-            </div>
-          </motion.div>
+              {/* Subtitle */}
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-xl"
+              >
+                Schedule a free consultation with our experienced specialist team
+              </motion.p>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-col sm:flex-row gap-4 pt-4"
+              >
+                {/* Primary Button */}
+                <motion.div 
+                  whileHover={{ scale: 1.05, y: -4 }} 
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link
+                    href="/booking"
+                    className="group relative px-8 py-5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 font-bold text-lg overflow-hidden"
+                  >
+                    {/* Button glow effect */}
+                    <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+                    
+                    <Calendar className="w-6 h-6 relative z-10" />
+                    <span className="relative z-10">Book Now</span>
+                    <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+                  </Link>
+                </motion.div>
+
+                {/* Secondary Button */}
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link
+                    href="/contact"
+                    className="px-8 py-5 bg-white/80 backdrop-blur-md text-gray-900 border-2 border-gray-200 rounded-full hover:bg-white hover:border-sky-300 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 font-semibold text-lg"
+                  >
+                    <Phone className="w-5 h-5" />
+                    <span>Call for Consultation</span>
+                  </Link>
+                </motion.div>
+              </motion.div>
+
+              {/* Trust Badge */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="pt-6 flex flex-wrap gap-6 text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 border-2 border-white"></div>
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium">10,000+ satisfied customers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex text-yellow-400">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium">4.9/5 rating</span>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Image Side */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative"
+            >
+              {/* Glassmorphism Card with Image */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                {/* Placeholder for smiling patient image */}
+                <div className="aspect-[4/3] bg-gradient-to-br from-sky-100 to-blue-100 relative">
+                  {/* Image overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-sky-900/20 to-transparent"></div>
+                  
+                  {/* Placeholder content - replace with actual image */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center space-y-4 p-8">
+                      <Smile className="w-24 h-24 text-sky-400 mx-auto opacity-50" />
+                      <p className="text-slate-500 text-sm">
+                        Replace with smiling patient image
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Floating Stats Badge */}
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-600 rounded-full flex items-center justify-center">
+                      <Star className="w-6 h-6 text-white fill-current" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">4.9/5</p>
+                      <p className="text-sm text-gray-600">Customer rating</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Decorative elements */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                className="absolute -top-6 -right-6 w-24 h-24 bg-sky-200/50 rounded-full blur-xl"
+              ></motion.div>
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-200/50 rounded-full blur-xl"
+              ></motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

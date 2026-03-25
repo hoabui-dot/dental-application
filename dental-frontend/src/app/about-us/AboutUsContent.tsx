@@ -64,18 +64,10 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
     const [currentCommitmentIndex, setCurrentCommitmentIndex] = useState(0)
     const [isTransitioning, setIsTransitioning] = useState(false)
     
-    if (!content) {
-        return (
-            <div className="container mx-auto px-4 py-16">
-                <h1 className="text-4xl font-bold mb-4 text-slate-900">{page?.title || 'About Us'}</h1>
-                <p className="text-lg text-slate-600">{page?.description}</p>
-            </div>
-        )
-    }
-
-    const { hero, achievements, whyChooseUs, philosophy, coreValues, commitment, cta } = content
+    // Extract commitment data early for hooks
+    const commitment = content?.commitment
     
-    // Safe commitment data handling with memoization
+    // Safe commitment data handling with memoization - moved before early return
     const commitmentItems = useMemo(() => commitment?.commitments || [], [commitment])
     const itemsPerSlide = 3
     const totalItems = commitmentItems.length
@@ -121,6 +113,18 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
             setTimeout(() => setIsTransitioning(false), 300)
         }
     }, [totalSlides, isTransitioning])
+    
+    // Early return after all hooks
+    if (!content) {
+        return (
+            <div className="container mx-auto px-4 py-16">
+                <h1 className="text-4xl font-bold mb-4 text-slate-900">{page?.title || 'About Us'}</h1>
+                <p className="text-lg text-slate-600">{page?.description}</p>
+            </div>
+        )
+    }
+
+    const { hero, achievements, whyChooseUs, philosophy, coreValues, cta } = content
 
     return (
         <div className="w-full bg-white">
@@ -462,202 +466,111 @@ export function AboutUsContent({ content, page }: AboutUsContentProps) {
                 </motion.section>
             )}
 
-            {/* 5. CORE VALUES SECTION */}
+            {/* 5. CORE VALUES SECTION - CLEAN GRID LAYOUT (2026 REDESIGN) */}
             {coreValues && (
                 <motion.section
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="px-6 py-24 md:py-32 max-w-7xl mx-auto"
+                    className="px-6 py-24 md:py-32 max-w-7xl mx-auto relative overflow-hidden"
                 >
-                    <motion.div className="text-center mb-20" variants={staggerContainer}>
-                        {coreValues.badge && (
-                            <motion.div variants={fadeIn} className="inline-block px-4 py-2 bg-sky-100 rounded-full mb-4">
-                                <span className="text-sky-600 font-medium">{coreValues.badge}</span>
+                    {/* Subtle background decoration */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white via-sky-50/30 to-white pointer-events-none"></div>
+                    <motion.div
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.03, 0.06, 0.03]
+                        }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-sky-400 rounded-full blur-3xl pointer-events-none"
+                    ></motion.div>
+
+                    <div className="relative z-10">
+                        {/* Header with badge */}
+                        <motion.div className="text-center mb-16" variants={staggerContainer}>
+                            {/* Small badge above title */}
+                            <motion.div 
+                                variants={fadeIn} 
+                                className="inline-block px-5 py-2 bg-gradient-to-r from-sky-100 to-blue-100 rounded-full mb-6 border border-sky-200/50"
+                            >
+                                <span className="text-sky-700 font-semibold text-sm uppercase tracking-wider">
+                                    {coreValues.badge || 'Core Values'}
+                                </span>
                             </motion.div>
-                        )}
-                        <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                            {coreValues.title}
-                        </motion.h2>
-                        {coreValues.description && (
-                            <motion.p variants={fadeInUp} className="text-lg text-slate-600 max-w-2xl mx-auto">
-                                {coreValues.description}
-                            </motion.p>
-                        )}
-                    </motion.div>
 
-                    {coreValues.values && (
-                        <>
-                            <div className="hidden md:block">
-                                <div className="relative max-w-5xl mx-auto h-[750px]">
-                                    {/* Animated center circle with trendy 2026 effects */}
-                                    <motion.div
-                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 mt-16"
-                                        initial={{ scale: 0, rotate: -180 }}
-                                        whileInView={{ scale: 1, rotate: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ 
-                                            duration: 1.2, 
-                                            ease: [0.34, 1.56, 0.64, 1],
-                                            delay: 0.3
-                                        }}
-                                    >
-                                        {/* Outer glow ring */}
-                                        <motion.div
-                                            className="absolute inset-0 rounded-full"
-                                            animate={{ 
-                                                scale: [1, 1.15, 1],
-                                                opacity: [0.3, 0.5, 0.3]
-                                            }}
-                                            transition={{ 
-                                                duration: 3,
-                                                repeat: Infinity,
-                                                ease: "easeInOut"
-                                            }}
-                                            style={{
-                                                background: 'radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, transparent 70%)',
-                                                filter: 'blur(20px)',
-                                                width: '220px',
-                                                height: '220px',
-                                                left: '50%',
-                                                top: '50%',
-                                                transform: 'translate(-50%, -50%)'
-                                            }}
-                                        />
-                                        
-                                        {/* Main circle */}
-                                        <motion.div
-                                            whileHover={{ 
-                                                scale: 1.08,
-                                                rotate: 360,
-                                                transition: { duration: 0.8, ease: "easeInOut" }
-                                            }}
-                                            animate={{
-                                                rotate: [0, 5, -5, 0],
-                                            }}
-                                            transition={{
-                                                rotate: {
-                                                    duration: 6,
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut"
-                                                }
-                                            }}
-                                            className="relative w-56 h-56 bg-gradient-to-br from-sky-400 via-sky-500 to-sky-600 rounded-full shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden"
-                                        >
-                                            {/* Shimmer effect */}
-                                            <motion.div
-                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
-                                                animate={{
-                                                    x: ['-100%', '200%']
-                                                }}
-                                                transition={{
-                                                    duration: 3,
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut",
-                                                    repeatDelay: 2
-                                                }}
-                                            />
-                                            
-                                            {/* Content */}
-                                            <div className="text-center text-white relative z-10">
-                                                <motion.p 
-                                                    className="text-5xl font-bold mb-2"
-                                                    animate={{ scale: [1, 1.1, 1] }}
-                                                    transition={{ duration: 2, repeat: Infinity }}
-                                                >
-                                                    {coreValues.values.length}
-                                                </motion.p>
-                                                <p className="text-sm uppercase tracking-wider font-semibold">Core Values</p>
-                                            </div>
-                                        </motion.div>
-                                    </motion.div>
+                            <motion.h2 
+                                variants={fadeInUp} 
+                                className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6"
+                            >
+                                {coreValues.title}
+                            </motion.h2>
+                            
+                            {coreValues.description && (
+                                <motion.p 
+                                    variants={fadeInUp} 
+                                    className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
+                                >
+                                    {coreValues.description}
+                                </motion.p>
+                            )}
+                        </motion.div>
 
-                                    {coreValues.values.map((value: any, index: number) => {
-                                        const Icon = iconMap[value.icon] || Heart
-                                        const positions = [
-                                            'top-0 left-1/2 -translate-x-1/2',
-                                            'bottom-8 left-8',
-                                            'bottom-8 right-8'
-                                        ]
-                                        return (
-                                            <motion.div
-                                                key={index}
-                                                initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                                viewport={{ once: true }}
-                                                transition={{ 
-                                                    duration: 0.6, 
-                                                    delay: 0.5 + (index * 0.15),
-                                                    ease: [0.34, 1.56, 0.64, 1]
-                                                }}
-                                                whileHover={{ 
-                                                    y: -12, 
-                                                    scale: 1.03,
-                                                    transition: { duration: 0.3 }
-                                                }}
-                                                className={`absolute ${positions[index] || positions[0]} w-80`}
-                                            >
-                                                <motion.div 
-                                                    className="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all border border-slate-100 relative overflow-hidden group"
-                                                    whileHover={{
-                                                        borderColor: 'rgb(14, 165, 233, 0.3)'
-                                                    }}
-                                                >
-                                                    {/* Hover gradient effect */}
-                                                    <motion.div
-                                                        className="absolute inset-0 bg-gradient-to-br from-sky-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                                    />
-                                                    
-                                                    <div className="relative z-10">
-                                                        <motion.div 
-                                                            className="bg-gradient-to-br from-sky-100 to-sky-50 p-4 rounded-2xl w-fit mb-4 mx-auto"
-                                                            whileHover={{ 
-                                                                scale: 1.15, 
-                                                                rotate: [0, -10, 10, 0],
-                                                                transition: { duration: 0.5 }
-                                                            }}
-                                                        >
-                                                            <Icon className="w-8 h-8 text-sky-600" />
-                                                        </motion.div>
-                                                        <h3 className="text-2xl font-bold text-slate-900 mb-3 text-center">{value.title}</h3>
-                                                        <p className="text-slate-600 text-center leading-relaxed">
-                                                            {value.description}
-                                                        </p>
-                                                    </div>
-                                                </motion.div>
-                                            </motion.div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-
-                            <motion.div className="md:hidden space-y-6" variants={staggerContainer}>
+                        {/* Clean Grid Layout - 3 Cards */}
+                        {coreValues.values && (
+                            <motion.div 
+                                className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+                                variants={staggerContainer}
+                            >
                                 {coreValues.values.map((value: any, index: number) => {
                                     const Icon = iconMap[value.icon] || Heart
                                     return (
                                         <motion.div
                                             key={index}
                                             variants={scaleIn}
-                                            whileHover={{ scale: 1.02 }}
-                                            className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100"
+                                            whileHover={{ 
+                                                y: -12, 
+                                                transition: { duration: 0.3, ease: "easeOut" }
+                                            }}
+                                            className="group"
                                         >
-                                            <motion.div 
-                                                className="bg-gradient-to-br from-sky-100 to-sky-50 p-4 rounded-2xl w-fit mb-4 mx-auto"
-                                                whileHover={{ scale: 1.1, rotate: 360 }}
-                                                transition={{ duration: 0.5 }}
-                                            >
-                                                <Icon className="w-8 h-8 text-sky-600" />
-                                            </motion.div>
-                                            <h3 className="text-2xl font-semibold text-slate-900 mb-3 text-center">{value.title}</h3>
-                                            <p className="text-slate-600 text-center leading-relaxed">
-                                                {value.description}
-                                            </p>
+                                            <div className="bg-white p-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-sky-200 relative overflow-hidden h-full flex flex-col">
+                                                {/* Hover gradient background */}
+                                                <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                
+                                                {/* Content */}
+                                                <div className="relative z-10 flex flex-col items-center text-center flex-grow">
+                                                    {/* Icon */}
+                                                    <motion.div 
+                                                        className="w-20 h-20 bg-gradient-to-br from-sky-100 to-sky-50 rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-lg transition-shadow duration-300"
+                                                        whileHover={{ 
+                                                            scale: 1.1,
+                                                            rotate: [0, -5, 5, 0],
+                                                            transition: { duration: 0.5 }
+                                                        }}
+                                                    >
+                                                        <Icon className="w-10 h-10 text-sky-600" />
+                                                    </motion.div>
+                                                    
+                                                    {/* Title */}
+                                                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+                                                        {value.title}
+                                                    </h3>
+                                                    
+                                                    {/* Description */}
+                                                    <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+                                                        {value.description}
+                                                    </p>
+                                                </div>
+
+                                                {/* Decorative corner accent */}
+                                                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-sky-100/50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                            </div>
                                         </motion.div>
                                     )
                                 })}
                             </motion.div>
-                        </>
-                    )}
+                        )}
+                    </div>
                 </motion.section>
             )}
 

@@ -102,11 +102,7 @@ const iconMap: Record<string, any> = {
 };
 
 export default function ContactPageClient({ content }: ContactPageClientProps) {
-  const { hero, quickContact, contactForm, clinicLocations, mapSection, cta } = content;
-  const contactCards = quickContact?.cards;
-  const form = contactForm;
-  const locations = clinicLocations?.locations;
-  const map = mapSection;
+  // Initialize hooks BEFORE any conditional returns
   const {
     register,
     handleSubmit,
@@ -115,6 +111,26 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
     reset,
   } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Safety check for content AFTER hooks
+  if (!content || typeof content !== 'object') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Content Error</h1>
+          <p className="text-gray-600">
+            The contact page content is not available.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const { hero, quickContact, contactForm, clinicLocations, mapSection, cta } = content;
+  const contactCards = quickContact?.cards;
+  const form = contactForm;
+  const locations = clinicLocations?.locations;
+  const map = mapSection;
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -512,77 +528,193 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
         </motion.div>
       )}
 
-      {/* CTA Section */}
+      {/* CTA Section - Premium 2026 Redesign */}
       {cta && (
-        <motion.div
-          className="relative bg-gradient-to-r from-sky-500 to-sky-600 py-20 px-4 overflow-hidden"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-sky-400 rounded-full opacity-20 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-700 rounded-full opacity-20 blur-3xl" />
-
-          <div className="max-w-4xl mx-auto text-center relative z-10">
-            <motion.h2
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              {cta.title}
-            </motion.h2>
-            <motion.p
-              className="text-xl text-sky-50 mb-8 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              {cta.description}
-            </motion.p>
-
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-            >
-              <Button className="bg-white text-sky-600 hover:bg-gray-50 rounded-xl py-6 px-10 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105">
-                <Calendar className="w-5 h-5 mr-2" />
-                {cta.primaryButtonText}
-              </Button>
-
-              <Button
-                variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-sky-600 rounded-xl py-6 px-10 text-lg font-semibold transition-all hover:scale-105"
-              >
-                {cta.secondaryButtonText}
-              </Button>
-            </motion.div>
-
-            {cta.stats && (
+        <section className="relative py-24 md:py-32 overflow-hidden">
+          {/* Soft Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-sky-100 to-sky-400"></div>
+          
+          {/* Animated Background Blobs */}
+          <motion.div
+            animate={{ 
+              scale: [1, 1.2, 1],
+              x: [0, 30, 0],
+              y: [0, -20, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 right-0 w-96 h-96 bg-sky-300/30 rounded-full blur-3xl"
+          ></motion.div>
+          <motion.div
+            animate={{ 
+              scale: [1, 1.3, 1],
+              x: [0, -40, 0],
+              y: [0, 30, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+            className="absolute bottom-0 left-0 w-80 h-80 bg-blue-300/30 rounded-full blur-3xl"
+          ></motion.div>
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* Content Side */}
               <motion.div
-                className="mt-12 flex flex-wrap justify-center gap-8 text-white"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-8"
               >
-                {cta.stats.map((stat: any, index: number) => (
-                  <div key={index}>
-                    <p className="text-3xl font-bold">{stat.value}</p>
-                    <p className="text-sky-100">{stat.label}</p>
-                  </div>
-                ))}
+                {/* Badge */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-block px-5 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-sky-200"
+                >
+                  <span className="text-sky-600 font-semibold text-sm uppercase tracking-wider">
+                    ✨ Contact Now
+                  </span>
+                </motion.div>
+
+                {/* Title */}
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+                >
+                  {cta.title}
+                </motion.h2>
+
+                {/* Subtitle */}
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-xl"
+                >
+                  {cta.description}
+                </motion.p>
+
+                {/* CTA Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 }}
+                  className="flex flex-col sm:flex-row gap-4 pt-4"
+                >
+                  {/* Primary Button */}
+                  <motion.div 
+                    whileHover={{ scale: 1.05, y: -4 }} 
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button className="group relative px-8 py-6 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 font-bold text-lg overflow-hidden">
+                      {/* Button glow effect */}
+                      <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+                      
+                      <Calendar className="w-6 h-6 relative z-10" />
+                      <span className="relative z-10">{cta.primaryButtonText}</span>
+                      <Send className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+                    </Button>
+                  </motion.div>
+
+                  {/* Secondary Button */}
+                  <motion.div 
+                    whileHover={{ scale: 1.05 }} 
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button
+                      variant="outline"
+                      className="px-8 py-6 bg-white/80 backdrop-blur-md text-gray-900 border-2 border-gray-200 rounded-full hover:bg-white hover:border-sky-300 hover:shadow-lg transition-all duration-300 flex items-center gap-2 font-semibold text-lg"
+                    >
+                      <Phone className="w-5 h-5" />
+                      <span>{cta.secondaryButtonText}</span>
+                    </Button>
+                  </motion.div>
+                </motion.div>
+
+                {/* Stats */}
+                {cta.stats && cta.stats.length > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 }}
+                    className="pt-6 flex flex-wrap gap-8"
+                  >
+                    {cta.stats.map((stat: any, index: number) => (
+                      <div key={index} className="text-center">
+                        <p className="text-3xl md:text-4xl font-bold text-gray-900">{stat.value}</p>
+                        <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
               </motion.div>
-            )}
+
+              {/* Image Side */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative"
+              >
+                {/* Glassmorphism Card with Image */}
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  {/* Placeholder for contact/clinic image */}
+                  <div className="aspect-[4/3] bg-gradient-to-br from-sky-100 to-blue-100 relative">
+                    {/* Image overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-sky-900/20 to-transparent"></div>
+                    
+                    {/* Placeholder content - replace with actual image */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center space-y-4 p-8">
+                        <MessageCircle className="w-24 h-24 text-sky-400 mx-auto opacity-50" />
+                        <p className="text-slate-500 text-sm">
+                          Replace with clinic/contact image
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Floating Contact Badge */}
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-600 rounded-full flex items-center justify-center">
+                        <Phone className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Hotline 24/7</p>
+                        <p className="text-xl font-bold text-gray-900">1900 8059</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Decorative elements */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-6 -right-6 w-24 h-24 bg-sky-200/50 rounded-full blur-xl"
+                ></motion.div>
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  className="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-200/50 rounded-full blur-xl"
+                ></motion.div>
+              </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </section>
       )}
     </div>
   );

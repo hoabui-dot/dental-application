@@ -42,7 +42,7 @@ export async function Footer() {
               </p>
             ) : (
               <p className="text-black mb-6">
-                Chăm sóc nha khoa cao cấp với sự chuyên nghiệp. Nụ cười của bạn là ưu tiên của chúng tôi.
+                Delivering world-class dental care with advanced technology and a dedicated team of specialists—committed to giving you a confident, healthy smile.
               </p>
             )}
             <div className="flex gap-4">
@@ -143,27 +143,27 @@ export async function Footer() {
                 <>
                   <li>
                     <Link href="/services/implant" className="text-black hover:text-sky-600 transition-colors">
-                      Cấy ghép Implant
+                      Dental Implants
                     </Link>
                   </li>
                   <li>
                     <Link href="/services/invisalign" className="text-black hover:text-sky-600 transition-colors">
-                      Niềng răng Invisalign
+                      Invisalign Braces
                     </Link>
                   </li>
                   <li>
                     <Link href="/services/veneer" className="text-black hover:text-sky-600 transition-colors">
-                      Bọc răng sứ thẩm mỹ
+                      Cosmetic Porcelain Crowns
                     </Link>
                   </li>
                   <li>
                     <Link href="/services/whitening" className="text-black hover:text-sky-600 transition-colors">
-                      Tẩy trắng răng
+                      Teeth Whitening
                     </Link>
                   </li>
                   <li>
                     <Link href="/services/emergency" className="text-black hover:text-sky-600 transition-colors">
-                      Cấp cứu nha khoa
+                      Emergency Dental Care
                     </Link>
                   </li>
                 </>

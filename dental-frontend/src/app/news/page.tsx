@@ -1,4 +1,5 @@
 import { NewsPageClient } from './NewsPageClient';
+import { apiClient } from '@/src/lib/api/client';
 
 interface BlogPost {
   id: number;
@@ -42,34 +43,38 @@ interface NewsPageContent {
   readNowText: string;
 }
 
+interface StrapiBlogsResponse {
+  data: BlogPost[];
+  meta?: any;
+}
+
+interface StrapiPageResponse {
+  data: Array<{
+    id: number;
+    documentId: string;
+    title: string;
+    slug: string;
+    content?: any;
+    publishedAt: string;
+  }>;
+  meta?: any;
+}
+
 const STRAPI_URL = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 
 async function fetchBlogs(): Promise<BlogPost[]> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiBlogsResponse>('/api/blogs', {
+      params: {
+        populate: '*',
+        sort: 'publishedAt:desc',
+        'pagination[limit]': 50,
+      },
+      isDraftMode: false,
+      tags: ['blogs'], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/blogs?populate=*&sort=publishedAt:desc&pagination[limit]=50`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      console.error('Failed to fetch blogs:', response.status, response.statusText);
-      return [];
-    }
-
-    const data = await response.json();
-    return data.data || [];
+    return response.data || [];
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return [];
@@ -78,30 +83,17 @@ async function fetchBlogs(): Promise<BlogPost[]> {
 
 async function fetchNewsPageContent(): Promise<NewsPageContent | null> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiPageResponse>('/api/pages', {
+      params: {
+        'filters[slug][$eq]': 'news-listing',
+        populate: '*',
+      },
+      isDraftMode: false,
+      tags: ['pages', 'page-news-listing'], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$eq]=news-listing&populate=*`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      console.error('Failed to fetch news page content:', response.status, response.statusText);
-      return null;
-    }
-
-    const data = await response.json();
-    if (data.data && data.data.length > 0) {
-      const pageData = data.data[0];
+    if (response.data && response.data.length > 0) {
+      const pageData = response.data[0];
       return JSON.parse(pageData.content);
     }
 

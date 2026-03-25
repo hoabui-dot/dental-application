@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MarkdownContent } from '@/src/components/MarkdownContent';
+import { apiClient } from '@/src/lib/api/client';
 
 interface BlogPost {
   id: number;
@@ -20,39 +21,29 @@ interface BlogPost {
   updatedAt: string;
 }
 
+interface StrapiResponse {
+  data: BlogPost[];
+  meta?: any;
+}
+
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 
 async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiResponse>('/api/blogs', {
+      params: {
+        'filters[slug][$eq]': slug,
+        populate: '*',
+      },
+      isDraftMode: false,
+      tags: ['blogs', `blog-${slug}`], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/blogs?filters[slug][$eq]=${slug}&populate=*`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      console.error('Failed to fetch blog:', response.statusText);
+    if (!response.data || response.data.length === 0) {
       return null;
     }
 
-    const data = await response.json();
-
-    if (!data.data || data.data.length === 0) {
-      return null;
-    }
-
-    return data.data[0];
+    return response.data[0];
   } catch (error) {
     console.error('Error fetching blog:', error);
     return null;
@@ -61,28 +52,15 @@ async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
 
 async function getAllBlogSlugs(): Promise<string[]> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiResponse>('/api/blogs', {
+      params: {
+        'fields[0]': 'slug',
+      },
+      isDraftMode: false,
+      tags: ['blogs'], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/blogs?fields[0]=slug`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-    return data.data?.map((blog: any) => blog.slug) || [];
+    return response.data?.map((blog) => blog.slug) || [];
   } catch (error) {
     console.error('Error fetching blog slugs:', error);
     return [];
@@ -104,12 +82,12 @@ export async function generateMetadata({
 
   if (!blog) {
     return {
-      title: 'Bài viết không tìm thấy',
+      title: 'Article Not Found',
     };
   }
 
   return {
-    title: `${blog.title} | Nha Khoa Quốc Tế Sài Gòn`,
+    title: `${blog.title} | Saigon International Dental Clinic`,
     description: blog.excerpt || blog.title,
   };
 }
@@ -142,13 +120,13 @@ export default async function BlogPostPage({
             <ol className="flex items-center gap-2 text-foreground-muted">
               <li>
                 <Link href="/" className="hover:text-primary-600 transition-colors">
-                  Trang chủ
+                  Home
                 </Link>
               </li>
               <li>/</li>
               <li>
                 <Link href="/news" className="hover:text-primary-600 transition-colors">
-                  Tin tức
+                  News
                 </Link>
               </li>
               <li>/</li>
@@ -202,7 +180,7 @@ export default async function BlogPostPage({
           {blog.content ? (
             <MarkdownContent content={blog.content} />
           ) : (
-            <p className="text-foreground-secondary">Nội dung đang được cập nhật...</p>
+            <p className="text-foreground-secondary">Content is being updated...</p>
           )}
         </div>
 
@@ -225,7 +203,7 @@ export default async function BlogPostPage({
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Quay lại tin tức
+            Back to News
           </Link>
         </div>
       </article>

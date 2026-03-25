@@ -24,10 +24,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Dental Practice',
-    default: 'Dental Practice - Professional Dental Care',
+    template: '%s | Nha Khoa Quốc Tế Sài Gòn',
+    default: 'Nha Khoa Quốc Tế Sài Gòn - Dịch Vụ Nha Khoa Chuyên Nghiệp',
   },
-  description: 'Professional dental services including implants, whitening, and braces',
+  description: 'Dịch vụ nha khoa chuyên nghiệp bao gồm cấy ghép implant, tẩy trắng răng và niềng răng',
+  icons: {
+    icon: 'https://pediatric-expired-through-casinos.trycloudflare.com/uploads/logo_37125485af.png',
+    shortcut: 'https://pediatric-expired-through-casinos.trycloudflare.com/uploads/logo_37125485af.png',
+    apple: 'https://pediatric-expired-through-casinos.trycloudflare.com/uploads/logo_37125485af.png',
+  },
 }
 
 interface RootLayoutProps {
@@ -39,7 +44,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const navigation = await getNavigation();
 
   return (
-    <html lang="en">
+    <html lang="vi">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <Header navigation={navigation} />
         <main className="flex-1">

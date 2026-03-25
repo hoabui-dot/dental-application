@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-
-const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+import { apiClient } from '@/src/lib/api/client';
 
 interface ServiceCard {
   slug: string;
@@ -40,36 +38,33 @@ interface ServicesListingData {
   features: Feature[];
 }
 
+interface StrapiResponse {
+  data: Array<{
+    id: number;
+    documentId: string;
+    title: string;
+    slug: string;
+    content?: any;
+    publishedAt: string;
+  }>;
+  meta?: any;
+}
+
 async function getServicesListingData(): Promise<ServicesListingData | null> {
   try {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    const response = await apiClient<StrapiResponse>('/api/pages', {
+      params: {
+        'filters[slug][$eq]': 'services-listing',
+      },
+      isDraftMode: false,
+      tags: ['pages', 'page-services-listing'], // Cache tags for webhook revalidation
+    });
 
-    if (STRAPI_TOKEN) {
-      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`;
-    }
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/pages?filters[slug][$eq]=services-listing`,
-      {
-        headers,
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      console.error('Failed to fetch services listing:', response.statusText);
+    if (!response.data || response.data.length === 0) {
       return null;
     }
 
-    const data = await response.json();
-
-    if (!data.data || data.data.length === 0) {
-      return null;
-    }
-
-    const pageData = data.data[0];
+    const pageData = response.data[0];
 
     // Parse content JSON
     if (pageData.content && typeof pageData.content === 'string') {
@@ -86,8 +81,8 @@ async function getServicesListingData(): Promise<ServicesListingData | null> {
 }
 
 export const metadata = {
-  title: 'Dịch vụ nha khoa | Nha Khoa Quốc Tế Sài Gòn',
-  description: 'Các dịch vụ nha khoa chuyên nghiệp: Cấy ghép Implant, Niềng răng Invisalign, Bọc răng sứ, Tẩy trắng răng',
+  title: 'Dental Services | Saigon International Dental Clinic',
+  description: 'Professional dental services: Dental Implants, Invisalign Braces, Porcelain Veneers, Teeth Whitening',
 };
 
 export default async function ServicesPage() {
@@ -95,8 +90,8 @@ export default async function ServicesPage() {
 
   // Fallback data if API fails
   const hero = listingData?.hero || {
-    title: 'Dịch vụ nha khoa chuyên nghiệp',
-    description: 'Chúng tôi cung cấp đa dạng các dịch vụ nha khoa với công nghệ hiện đại và đội ngũ bác sĩ giàu kinh nghiệm'
+    title: 'Professional Dental Services',
+    description: 'We provide a wide range of dental services with modern technology and experienced doctors'
   };
 
   const services = listingData?.services || [];
@@ -110,7 +105,7 @@ export default async function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-block px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-medium mb-6">
-              Dịch vụ nha khoa
+              Dental Services
             </div>
 
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-6">
@@ -158,7 +153,7 @@ export default async function ServicesPage() {
 
                 {/* CTA */}
                 <div className="inline-flex items-center gap-2 text-sky-500 font-medium group-hover:gap-4 transition-all">
-                  <span>Tìm hiểu thêm</span>
+                  <span>Learn More</span>
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
@@ -199,7 +194,7 @@ export default async function ServicesPage() {
       {features.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-white to-sky-50">
           <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-12">
-            Tại sao chọn chúng tôi?
+            Why Choose Us?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
