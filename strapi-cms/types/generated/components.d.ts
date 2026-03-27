@@ -1,5 +1,153 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface CustomerBenefitItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_benefit_items';
+  info: {
+    displayName: 'Benefit Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerBenefits extends Struct.ComponentSchema {
+  collectionName: 'components_customer_benefits';
+  info: {
+    displayName: 'Benefits';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    benefits: Schema.Attribute.Component<'customer.benefit-item', true>;
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerContactInfoItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_contact_info_items';
+  info: {
+    displayName: 'Contact Info Item';
+  };
+  attributes: {
+    text: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerCta extends Struct.ComponentSchema {
+  collectionName: 'components_customer_cta';
+  info: {
+    displayName: 'CTA';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    contact_info: Schema.Attribute.Component<
+      'customer.contact-info-item',
+      true
+    >;
+    description: Schema.Attribute.Text;
+    primary_button_link: Schema.Attribute.String;
+    primary_button_text: Schema.Attribute.String;
+    secondary_button_link: Schema.Attribute.String;
+    secondary_button_text: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerFaq extends Struct.ComponentSchema {
+  collectionName: 'components_customer_faq';
+  info: {
+    displayName: 'FAQ';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    questions: Schema.Attribute.Component<'customer.faq-item', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerFaqItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_faq_items';
+  info: {
+    displayName: 'FAQ Item';
+  };
+  attributes: {
+    answer: Schema.Attribute.Text;
+    question: Schema.Attribute.Text;
+  };
+}
+
+export interface CustomerHero extends Struct.ComponentSchema {
+  collectionName: 'components_customer_hero';
+  info: {
+    description: 'Customer page hero section';
+    displayName: 'Hero';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    images: Schema.Attribute.JSON;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerStatItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_stat_items';
+  info: {
+    displayName: 'Stat Item';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    number: Schema.Attribute.String;
+    suffix: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerStatistics extends Struct.ComponentSchema {
+  collectionName: 'components_customer_statistics';
+  info: {
+    displayName: 'Statistics';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    stats: Schema.Attribute.Component<'customer.stat-item', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerStoryItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_story_items';
+  info: {
+    displayName: 'Story Item';
+  };
+  attributes: {
+    before_after: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    icon: Schema.Attribute.String;
+    location: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    quote: Schema.Attribute.Text;
+    rating: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<5>;
+    treatment: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerSuccessStories extends Struct.ComponentSchema {
+  collectionName: 'components_customer_success_stories';
+  info: {
+    displayName: 'Success Stories';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    stories: Schema.Attribute.Component<'customer.story-item', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface FooterContactInfo extends Struct.ComponentSchema {
   collectionName: 'components_footer_contact_infos';
   info: {
@@ -417,6 +565,17 @@ export interface MenuNavItem extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'customer.benefit-item': CustomerBenefitItem;
+      'customer.benefits': CustomerBenefits;
+      'customer.contact-info-item': CustomerContactInfoItem;
+      'customer.cta': CustomerCta;
+      'customer.faq': CustomerFaq;
+      'customer.faq-item': CustomerFaqItem;
+      'customer.hero': CustomerHero;
+      'customer.stat-item': CustomerStatItem;
+      'customer.statistics': CustomerStatistics;
+      'customer.story-item': CustomerStoryItem;
+      'customer.success-stories': CustomerSuccessStories;
       'footer.contact-info': FooterContactInfo;
       'footer.link': FooterLink;
       'footer.social-link': FooterSocialLink;
