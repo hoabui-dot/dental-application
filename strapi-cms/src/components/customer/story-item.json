@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_customer_story_items",
+  "info": {
+    "displayName": "Story Item"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "treatment": {
+      "type": "string"
+    },
+    "quote": {
+      "type": "text"
+    },
+    "rating": {
+      "type": "integer",
+      "default": 5
+    },
+    "before_after": {
+      "type": "boolean",
+      "default": false
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

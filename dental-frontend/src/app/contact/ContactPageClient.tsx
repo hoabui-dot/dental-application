@@ -8,6 +8,7 @@ import {
   Sparkles, Phone, Mail, Clock, MessageCircle, MapPin,
   ExternalLink, Calendar, Send
 } from 'lucide-react';
+import { GoogleMapSection, type ClinicLocation } from '../../components/maps/GoogleMapSection';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -481,51 +482,43 @@ export default function ContactPageClient({ content }: ContactPageClientProps) {
         </div>
       )}
 
-      {/* Map Section */}
+      {/* Interactive Map Section with Google Maps */}
       {map && map.enabled && (
-        <motion.div
-          className="w-full h-[500px] bg-gray-200 relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Map Placeholder */}
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sky-100 to-sky-50">
-            <motion.div
-              className="text-center p-8"
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="text-6xl mb-4">📍</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                {map.title}
-              </h3>
-              <p className="text-gray-600 max-w-md">
-                {map.description}
-                <br />
-                <span className="text-sm text-gray-500 mt-2 block">
-                  {map.note}
-                </span>
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Location Markers Overlay */}
-          {map.markers?.map((marker: any, index: number) => (
-            <div
-              key={index}
-              className={`absolute bg-white rounded-2xl shadow-lg p-4 max-w-xs animate-pulse ${index === 0 ? 'top-1/4 left-1/4' : 'bottom-1/3 right-1/4'
-                }`}
-              style={{ animationDelay: `${index * 0.5}s` }}
-            >
-              <p className="font-semibold text-gray-900">{marker.name}</p>
-              <p className="text-sm text-gray-600">{marker.address}</p>
-            </div>
-          ))}
-        </motion.div>
+        <GoogleMapSection
+          title={map.title || "Find Us"}
+          description={map.description || "Visit our conveniently located clinics"}
+          locations={
+            locations?.map((loc: any, index: number): ClinicLocation => ({
+              id: `clinic-${index}`,
+              name: loc.name,
+              address: loc.address,
+              phone: loc.phone,
+              hours: 'Mon-Sat: 8:00 AM - 8:00 PM',
+              lat: map.markers?.[index]?.lat || (10.7769 + index * 0.05),
+              lng: map.markers?.[index]?.lng || (106.7009 + index * 0.02),
+              mapUrl: loc.mapUrl,
+            })) || [
+              {
+                id: 'district-1',
+                name: 'Saigon Dental - District 1',
+                address: '123 Nguyen Hue Boulevard, District 1, Ho Chi Minh City',
+                phone: '1900 8089',
+                hours: 'Mon-Sat: 8:00 AM - 8:00 PM',
+                lat: 10.7769,
+                lng: 106.7009,
+              },
+              {
+                id: 'district-7',
+                name: 'Saigon Dental - District 7',
+                address: '456 Nguyen Van Linh, District 7, Ho Chi Minh City',
+                phone: '1900 8089',
+                hours: 'Mon-Sat: 8:00 AM - 8:00 PM',
+                lat: 10.7293,
+                lng: 106.7217,
+              },
+            ]
+          }
+        />
       )}
 
       {/* CTA Section - Premium 2026 Redesign */}

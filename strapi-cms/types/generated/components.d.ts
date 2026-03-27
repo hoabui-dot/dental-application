@@ -1,160 +1,150 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
-export interface AboutAchievements extends Struct.ComponentSchema {
-  collectionName: 'components_about_achievements';
+export interface CustomerBenefitItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_benefit_items';
   info: {
-    description: 'Achievements section with features list and image';
-    displayName: 'About Achievements';
+    displayName: 'Benefit Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerBenefits extends Struct.ComponentSchema {
+  collectionName: 'components_customer_benefits';
+  info: {
+    displayName: 'Benefits';
   };
   attributes: {
     badge: Schema.Attribute.String;
+    benefits: Schema.Attribute.Component<'customer.benefit-item', true>;
     description: Schema.Attribute.Text;
-    features: Schema.Attribute.Component<'homepage.feature-item', true>;
-    image: Schema.Attribute.Media<'images'>;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String;
   };
 }
 
-export interface AboutCommitment extends Struct.ComponentSchema {
-  collectionName: 'components_about_commitment';
+export interface CustomerContactInfoItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_contact_info_items';
   info: {
-    description: 'Commitment section with timeline layout';
-    displayName: 'About Commitment';
-  };
-  attributes: {
-    badge: Schema.Attribute.String;
-    commitments: Schema.Attribute.Component<'about.commitment-item', true>;
-    description: Schema.Attribute.Text;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutCommitmentItem extends Struct.ComponentSchema {
-  collectionName: 'components_about_commitment_items';
-  info: {
-    description: 'Individual commitment item for timeline';
-    displayName: 'Commitment Item';
-  };
-  attributes: {
-    description: Schema.Attribute.Text;
-    icon: Schema.Attribute.String & Schema.Attribute.Required;
-    number: Schema.Attribute.String & Schema.Attribute.Required;
-    subtitle: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutContactInfoItem extends Struct.ComponentSchema {
-  collectionName: 'components_about_contact_info_items';
-  info: {
-    description: 'Individual contact info item for CTA section';
     displayName: 'Contact Info Item';
   };
   attributes: {
-    text: Schema.Attribute.String & Schema.Attribute.Required;
+    text: Schema.Attribute.String;
   };
 }
 
-export interface AboutCoreValues extends Struct.ComponentSchema {
-  collectionName: 'components_about_core_values';
+export interface CustomerCta extends Struct.ComponentSchema {
+  collectionName: 'components_customer_cta';
   info: {
-    description: 'Core values section with circular layout';
-    displayName: 'About Core Values';
+    displayName: 'CTA';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    contact_info: Schema.Attribute.Component<
+      'customer.contact-info-item',
+      true
+    >;
+    description: Schema.Attribute.Text;
+    primary_button_link: Schema.Attribute.String;
+    primary_button_text: Schema.Attribute.String;
+    secondary_button_link: Schema.Attribute.String;
+    secondary_button_text: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerFaq extends Struct.ComponentSchema {
+  collectionName: 'components_customer_faq';
+  info: {
+    displayName: 'FAQ';
   };
   attributes: {
     badge: Schema.Attribute.String;
     description: Schema.Attribute.Text;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-    values: Schema.Attribute.Component<'about.value-item', true>;
+    questions: Schema.Attribute.Component<'customer.faq-item', true>;
+    title: Schema.Attribute.String;
   };
 }
 
-export interface AboutCta extends Struct.ComponentSchema {
-  collectionName: 'components_about_cta';
+export interface CustomerFaqItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_faq_items';
   info: {
-    description: 'Call to action section for About Us page';
-    displayName: 'About CTA';
+    displayName: 'FAQ Item';
+  };
+  attributes: {
+    answer: Schema.Attribute.Text;
+    question: Schema.Attribute.Text;
+  };
+}
+
+export interface CustomerHero extends Struct.ComponentSchema {
+  collectionName: 'components_customer_hero';
+  info: {
+    description: 'Customer page hero section';
+    displayName: 'Hero';
   };
   attributes: {
     badge: Schema.Attribute.String;
-    contactInfo: Schema.Attribute.Component<'about.contact-info-item', true>;
     description: Schema.Attribute.Text;
-    primaryButtonLink: Schema.Attribute.String;
-    primaryButtonText: Schema.Attribute.String & Schema.Attribute.Required;
-    secondaryButtonLink: Schema.Attribute.String;
-    secondaryButtonText: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutHero extends Struct.ComponentSchema {
-  collectionName: 'components_about_hero';
-  info: {
-    description: 'Hero section for About Us page with badge, title, subtitle, description and image collage';
-    displayName: 'About Hero';
-  };
-  attributes: {
-    badge: Schema.Attribute.String & Schema.Attribute.DefaultTo<'About Us'>;
-    description: Schema.Attribute.Text;
-    images: Schema.Attribute.Media<'images', true>;
+    images: Schema.Attribute.JSON;
     subtitle: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String;
   };
 }
 
-export interface AboutPhilosophy extends Struct.ComponentSchema {
-  collectionName: 'components_about_philosophy';
+export interface CustomerStatItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_stat_items';
   info: {
-    description: 'Philosophy section with quote and pillars';
-    displayName: 'About Philosophy';
+    displayName: 'Stat Item';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    number: Schema.Attribute.String;
+    suffix: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerStatistics extends Struct.ComponentSchema {
+  collectionName: 'components_customer_statistics';
+  info: {
+    displayName: 'Statistics';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    stats: Schema.Attribute.Component<'customer.stat-item', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerStoryItem extends Struct.ComponentSchema {
+  collectionName: 'components_customer_story_items';
+  info: {
+    displayName: 'Story Item';
+  };
+  attributes: {
+    before_after: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    icon: Schema.Attribute.String;
+    location: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    quote: Schema.Attribute.Text;
+    rating: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<5>;
+    treatment: Schema.Attribute.String;
+  };
+}
+
+export interface CustomerSuccessStories extends Struct.ComponentSchema {
+  collectionName: 'components_customer_success_stories';
+  info: {
+    displayName: 'Success Stories';
   };
   attributes: {
     badge: Schema.Attribute.String;
     description: Schema.Attribute.Text;
-    image: Schema.Attribute.Media<'images'>;
-    pillars: Schema.Attribute.Component<'about.pillar-item', true>;
-    quote: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutPillarItem extends Struct.ComponentSchema {
-  collectionName: 'components_about_pillar_items';
-  info: {
-    description: 'Individual pillar item for philosophy section';
-    displayName: 'Pillar Item';
-  };
-  attributes: {
-    subtitle: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutValueItem extends Struct.ComponentSchema {
-  collectionName: 'components_about_value_items';
-  info: {
-    description: 'Individual value item for core values section';
-    displayName: 'Value Item';
-  };
-  attributes: {
-    description: Schema.Attribute.Text;
-    icon: Schema.Attribute.String & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface AboutWhyChooseUs extends Struct.ComponentSchema {
-  collectionName: 'components_about_why_choose_us';
-  info: {
-    description: 'Why choose us section with features and images';
-    displayName: 'About Why Choose Us';
-  };
-  attributes: {
-    badge: Schema.Attribute.String;
-    description: Schema.Attribute.Text;
-    features: Schema.Attribute.Component<'homepage.feature-item', true>;
-    images: Schema.Attribute.Media<'images', true>;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    stories: Schema.Attribute.Component<'customer.story-item', true>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -575,17 +565,17 @@ export interface MenuNavItem extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
-      'about.achievements': AboutAchievements;
-      'about.commitment': AboutCommitment;
-      'about.commitment-item': AboutCommitmentItem;
-      'about.contact-info-item': AboutContactInfoItem;
-      'about.core-values': AboutCoreValues;
-      'about.cta': AboutCta;
-      'about.hero': AboutHero;
-      'about.philosophy': AboutPhilosophy;
-      'about.pillar-item': AboutPillarItem;
-      'about.value-item': AboutValueItem;
-      'about.why-choose-us': AboutWhyChooseUs;
+      'customer.benefit-item': CustomerBenefitItem;
+      'customer.benefits': CustomerBenefits;
+      'customer.contact-info-item': CustomerContactInfoItem;
+      'customer.cta': CustomerCta;
+      'customer.faq': CustomerFaq;
+      'customer.faq-item': CustomerFaqItem;
+      'customer.hero': CustomerHero;
+      'customer.stat-item': CustomerStatItem;
+      'customer.statistics': CustomerStatistics;
+      'customer.story-item': CustomerStoryItem;
+      'customer.success-stories': CustomerSuccessStories;
       'footer.contact-info': FooterContactInfo;
       'footer.link': FooterLink;
       'footer.social-link': FooterSocialLink;
