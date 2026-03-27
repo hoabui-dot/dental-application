@@ -83,6 +83,32 @@ Step-by-step guides for complex operations:
 - **Typography**: Clean, readable fonts
 - **Components**: shadcn/ui based
 
+## Migration Scripts
+
+The project uses migration scripts in `/migration_scripts/` and `/scripts/` folders to manage Strapi CMS content and database structure.
+
+### Key Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/001-inspect-strapi-database.js` | Inspect database structure |
+| `scripts/002-create-customers-group-component.js` | Create Customers page components |
+| `scripts/003-verify-fix-about-us-structure.js` | Verify/fix About Us structure |
+| `migration_scripts/024-create-customer-page.js` | Create Customer page data |
+
+### Running Scripts
+
+```bash
+# Inspect database structure
+node scripts/001-inspect-strapi-database.js
+
+# Create customers group components
+node scripts/002-create-customers-group-component.js
+
+# Verify and fix about us page
+node scripts/003-verify-fix-about-us-structure.js
+```
+
 ## Contributing
 
 When adding new AI skills:
@@ -90,3 +116,28 @@ When adding new AI skills:
 2. Include usage examples
 3. Reference related context files
 4. Test with multiple AI agents
+
+## Usage Instructions
+
+### How to Use This System
+
+1. **For Claude/ChatGPT/Kiro**: Copy the relevant context files and prompts into your conversation
+2. **For Copilot**: Reference files using `@workspace` mentions
+3. **For Custom Agents**: Load files as system prompts or context
+
+### Example: Creating a New Page
+
+```
+1. Read: .ai/context/architecture.md
+2. Read: .ai/context/strapi-cms.md
+3. Follow: .ai/workflows/new-page.md
+4. Use: .ai/prompts/ui-generation.md for components
+```
+
+### Example: Strapi Integration
+
+```
+1. Read: .ai/context/strapi-cms.md
+2. Use: .ai/prompts/strapi-integration.md
+3. Follow: .ai/workflows/migration-script.md
+```

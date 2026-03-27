@@ -1,7 +1,6 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { getPageBySlug } from '@/src/lib/api/queries'
+import { getCustomersPage } from '@/src/lib/api/queries'
 import { PreviewBanner } from '@/src/components/PreviewBanner'
 import { CustomerContent } from './CustomerContent'
 
@@ -15,17 +14,10 @@ import { CustomerContent } from './CustomerContent'
 export async function generateMetadata(): Promise<Metadata> {
     try {
         const { isEnabled: isDraftMode } = await draftMode()
-        const page = await getPageBySlug('customers', isDraftMode)
+        const { page } = await getCustomersPage()
 
-        if (!page) {
-            return {
-                title: 'Our Customers - Page Not Found',
-                description: 'The Customer page could not be found.',
-            }
-        }
-
-        const title = page.seo?.metaTitle || page.title || 'Our Customers - Saigon International Dental Clinic'
-        const description = page.seo?.metaDescription || page.description || 'Discover why thousands of patients trust Saigon International Dental Clinic'
+        const title = page?.title || 'Our Customers - Saigon International Dental Clinic'
+        const description = page?.description || 'Discover why thousands of patients trust Saigon International Dental Clinic'
 
         return {
             title: isDraftMode ? `[PREVIEW] ${title}` : title,
@@ -54,30 +46,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CustomerPage() {
     try {
         const { isEnabled: isDraftMode } = await draftMode()
-        const page = await getPageBySlug('customers', isDraftMode)
-
-        if (!page) {
-            notFound()
-        }
-
-        // Parse JSON content if it exists
-        let parsedContent = null
-        if (page.content && typeof page.content === 'string') {
-            try {
-                parsedContent = JSON.parse(page.content)
-            } catch (e) {
-                console.error('Error parsing customers content:', e)
-            }
-        } else if (page.content && typeof page.content === 'object') {
-            parsedContent = page.content
-        }
+        const { page, content } = await getCustomersPage()
 
         return (
             <>
                 {isDraftMode && <PreviewBanner />}
 
                 <main className={isDraftMode ? "min-h-screen bg-background pt-20" : "min-h-screen bg-background"}>
-                    <CustomerContent content={parsedContent} page={page} />
+                    <CustomerContent content={content} page={page} />
                 </main>
             </>
         )
