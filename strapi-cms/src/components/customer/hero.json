@@ -19,7 +19,11 @@
       "type": "text"
     },
     "images": {
-      "type": "json"
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true
     }
   }
 }
