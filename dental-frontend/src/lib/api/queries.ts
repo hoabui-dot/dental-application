@@ -709,3 +709,289 @@ export async function getHomepage(): Promise<Homepage> {
     };
   }
 }
+
+/**
+ * Fetches the Customers page data from Strapi CMS
+ * Supports both pages collection and customers-page single type
+ */
+export async function getCustomersPage(): Promise<{
+  page: { title: string; description: string; slug: string } | null;
+  content: any;
+}> {
+  try {
+    // First try to get from pages collection (uses JSON content field)
+    const pagesResponse = await fetchAPI(
+      "/api/pages?filters[slug][$eq]=customers&populate=*"
+    );
+
+    if (pagesResponse?.data && pagesResponse.data.length > 0) {
+      const pageData = pagesResponse.data[0];
+
+      let content = null;
+      if (pageData.content) {
+        try {
+          content = JSON.parse(pageData.content);
+        } catch {
+          content = pageData.content;
+        }
+      }
+
+      return {
+        page: {
+          title: pageData.title || "Our Customers",
+          description:
+            pageData.description ||
+            "Discover why thousands of patients trust us",
+          slug: pageData.slug || "customers",
+        },
+        content,
+      };
+    }
+
+    // Fallback: Try customers-page single type
+    try {
+      const singleTypeResponse = await fetchAPI(
+        "/api/customers-page?populate=deep"
+      );
+
+      if (singleTypeResponse?.data) {
+        const data = singleTypeResponse.data;
+
+        // Transform single type layout to content structure
+        const content = transformCustomersLayoutToContent(data.layout);
+
+        return {
+          page: {
+            title: data.title || "Our Customers",
+            description:
+              data.description || "Discover why thousands of patients trust us",
+            slug: data.slug || "customers",
+          },
+          content,
+        };
+      }
+    } catch (singleTypeError) {
+      console.log(
+        "[getCustomersPage] Single type not available, using fallback"
+      );
+    }
+
+    // Return default content if nothing found
+    return {
+      page: {
+        title: "Our Customers - Saigon International Dental Clinic",
+        description:
+          "Discover why thousands of patients trust Saigon International Dental Clinic for their dental care needs.",
+        slug: "customers",
+      },
+      content: getDefaultCustomersContent(),
+    };
+  } catch (error) {
+    console.error("[getCustomersPage] Error fetching customers page:", error);
+    return {
+      page: {
+        title: "Our Customers",
+        description: "Discover why thousands of patients trust us",
+        slug: "customers",
+      },
+      content: getDefaultCustomersContent(),
+    };
+  }
+}
+
+/**
+ * Transform single type layout components to content structure
+ */
+function transformCustomersLayoutToContent(layout: any[]): any {
+  if (!layout || !Array.isArray(layout)) return getDefaultCustomersContent();
+
+  const content: any = {};
+
+  for (const component of layout) {
+    const componentType = component.__component?.split(".")[1];
+
+    switch (componentType) {
+      case "hero":
+        content.hero = {
+          badge: component.badge,
+          title: component.title,
+          subtitle: component.subtitle,
+          description: component.description,
+          images: component.images || [],
+        };
+        break;
+
+      case "success-stories-section":
+        content.successStories = {
+          badge: component.badge,
+          title: component.title,
+          description: component.description,
+          stories: component.stories || [],
+        };
+        break;
+
+      case "benefits-section":
+        content.customerBenefits = {
+          badge: component.badge,
+          title: component.title,
+          description: component.description,
+          benefits: component.benefits || [],
+        };
+        break;
+
+      case "statistics-section":
+        content.statistics = {
+          badge: component.badge,
+          title: component.title,
+          stats: component.stats || [],
+        };
+        break;
+
+      case "faq-section":
+        content.faq = {
+          badge: component.badge,
+          title: component.title,
+          description: component.description,
+          questions: component.questions || [],
+        };
+        break;
+
+      case "cta":
+        content.cta = {
+          badge: component.badge,
+          title: component.title,
+          description: component.description,
+          primaryButtonText: component.primary_button_text,
+          primaryButtonLink: component.primary_button_link,
+          secondaryButtonText: component.secondary_button_text,
+          secondaryButtonLink: component.secondary_button_link,
+          contactInfo: component.contact_info || [],
+        };
+        break;
+    }
+  }
+
+  return content;
+}
+
+/**
+ * Default customers page content for fallback
+ */
+function getDefaultCustomersContent(): any {
+  return {
+    hero: {
+      badge: "Our Customers",
+      title: "Trusted by Thousands of Happy Patients",
+      subtitle: "Your smile is our success story",
+      description:
+        "For over 15 years, we have been honored to serve patients from around the world. Our commitment to excellence has earned us the trust of thousands of families who rely on us for their dental care needs.",
+      images: [],
+    },
+    successStories: {
+      badge: "Success Stories",
+      title: "Real Stories from Real Patients",
+      description:
+        "Hear from our patients about their transformative dental experiences.",
+      stories: [
+        {
+          name: "Sarah Thompson",
+          location: "Australia",
+          treatment: "Full Smile Makeover",
+          quote:
+            "I traveled from Sydney specifically for my treatment here. The results exceeded my expectations!",
+          rating: 5,
+          beforeAfter: true,
+          icon: "Star",
+        },
+        {
+          name: "Michael Chen",
+          location: "Singapore",
+          treatment: "Dental Implants",
+          quote:
+            "The team here not only restored my smile but made the entire process comfortable and stress-free.",
+          rating: 5,
+          beforeAfter: true,
+          icon: "Heart",
+        },
+      ],
+    },
+    customerBenefits: {
+      badge: "Why Patients Choose Us",
+      title: "The Benefits Our Customers Enjoy",
+      description:
+        "We go above and beyond to ensure every patient receives exceptional care.",
+      benefits: [
+        {
+          icon: "Award",
+          title: "International Quality Standards",
+          description:
+            "Our clinic meets and exceeds international dental care standards.",
+        },
+        {
+          icon: "Clock",
+          title: "Flexible Scheduling",
+          description:
+            "We offer convenient appointment times including weekends and evenings.",
+        },
+        {
+          icon: "Globe",
+          title: "Multilingual Staff",
+          description:
+            "Our team speaks multiple languages for your comfort.",
+        },
+        {
+          icon: "Shield",
+          title: "Comprehensive Warranty",
+          description:
+            "All major treatments come with extended warranties.",
+        },
+      ],
+    },
+    statistics: {
+      badge: "By The Numbers",
+      title: "Our Track Record Speaks for Itself",
+      stats: [
+        { number: "15,000+", label: "Happy Patients", icon: "Users" },
+        { number: "98%", label: "Satisfaction Rate", icon: "ThumbsUp" },
+        { number: "50+", label: "Countries Served", icon: "Globe" },
+        { number: "25,000+", label: "Successful Treatments", icon: "CheckCircle" },
+      ],
+    },
+    faq: {
+      badge: "Customer FAQ",
+      title: "Frequently Asked Questions",
+      description: "Find answers to common questions from our patients",
+      questions: [
+        {
+          question: "How do I book my first appointment?",
+          answer:
+            "You can book through our website, by calling our hotline at 1900 8089, or by sending us an email.",
+        },
+        {
+          question: "Do you offer services in English?",
+          answer:
+            "Yes! Our team is fluent in English, Korean, Japanese, and Mandarin.",
+        },
+        {
+          question: "What payment methods do you accept?",
+          answer:
+            "We accept cash, credit/debit cards, bank transfers, and financing options.",
+        },
+      ],
+    },
+    cta: {
+      badge: "Join Our Family",
+      title: "Ready to Experience the Difference?",
+      description:
+        "Join thousands of satisfied patients and discover why we are the trusted choice for dental care.",
+      primaryButtonText: "Book Your Consultation",
+      primaryButtonLink: "/contact",
+      secondaryButtonText: "View Our Services",
+      secondaryButtonLink: "/services",
+      contactInfo: [
+        { text: "Hotline: 1900 8089" },
+        { text: "info@saigondental.com" },
+      ],
+    },
+  };
+}
