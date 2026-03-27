@@ -18,12 +18,25 @@
     "description": {
       "type": "text"
     },
-    "images": {
-      "allowedTypes": [
-        "images"
-      ],
+    "image1": {
       "type": "media",
-      "multiple": true
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "image2": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "image3": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "image4": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
     }
   }
 }
