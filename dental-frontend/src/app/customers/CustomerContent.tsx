@@ -605,104 +605,308 @@ export function CustomerContent({ content, page }: CustomerContentProps) {
                 </motion.section>
             )}
 
-            {/* 6. CTA SECTION */}
+            {/* 6. CTA SECTION - IMMERSIVE PREMIUM DESIGN */}
             {cta && (
                 <motion.section
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="relative px-6 py-24 md:py-32 overflow-hidden"
+                    className="relative px-6 py-28 md:py-40 overflow-hidden"
                 >
-                    {/* Gradient Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-sky-100 to-white" />
+                    {/* Multi-layer Animated Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-sky-900 to-slate-900" />
                     
-                    {/* Animated Blobs */}
+                    {/* Animated Grid Pattern */}
+                    <div 
+                        className="absolute inset-0 opacity-10"
+                        style={{
+                            backgroundImage: `linear-gradient(rgba(56, 189, 248, 0.3) 1px, transparent 1px), 
+                                              linear-gradient(90deg, rgba(56, 189, 248, 0.3) 1px, transparent 1px)`,
+                            backgroundSize: '60px 60px'
+                        }}
+                    />
+                    
+                    {/* Floating Orbs with Glow */}
+                    <motion.div
+                        animate={{ 
+                            scale: [1, 1.4, 1],
+                            x: [0, 100, 0],
+                            y: [0, -50, 0],
+                            rotate: [0, 180, 360]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-10 right-10 w-72 h-72 bg-gradient-to-br from-sky-400/40 to-cyan-400/20 rounded-full blur-3xl"
+                    />
+                    <motion.div
+                        animate={{ 
+                            scale: [1.3, 1, 1.3],
+                            x: [0, -80, 0],
+                            y: [0, 60, 0],
+                            rotate: [360, 180, 0]
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-sky-500/30 to-blue-600/20 rounded-full blur-3xl"
+                    />
                     <motion.div
                         animate={{ 
                             scale: [1, 1.2, 1],
-                            x: [0, 30, 0],
-                            y: [0, -20, 0]
-                        }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-0 right-0 w-96 h-96 bg-sky-300/30 rounded-full blur-3xl"
-                    />
-                    <motion.div
-                        animate={{ 
-                            scale: [1.2, 1, 1.2],
-                            x: [0, -30, 0],
-                            y: [0, 20, 0]
+                            opacity: [0.3, 0.6, 0.3]
                         }}
                         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute bottom-0 left-0 w-80 h-80 bg-sky-400/20 rounded-full blur-3xl"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-sky-400/20 via-transparent to-transparent rounded-full"
                     />
 
-                    <div className="max-w-4xl mx-auto relative z-10 text-center">
-                        <motion.div variants={staggerContainer}>
-                            {cta.badge && (
-                                <motion.div 
-                                    variants={fadeIn} 
-                                    className="inline-block px-5 py-2 bg-sky-500 rounded-full mb-6"
-                                >
-                                    <span className="text-white font-semibold text-sm uppercase tracking-wider">
-                                        {cta.badge}
-                                    </span>
-                                </motion.div>
-                            )}
-                            <motion.h2 
-                                variants={fadeInUp} 
-                                className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6"
-                            >
-                                {cta.title}
-                            </motion.h2>
-                            {cta.description && (
-                                <motion.p 
-                                    variants={fadeInUp} 
-                                    className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto"
-                                >
-                                    {cta.description}
-                                </motion.p>
-                            )}
+                    {/* Animated Particles */}
+                    {[...Array(12)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-2 h-2 bg-sky-400/60 rounded-full"
+                            style={{
+                                left: `${10 + (i * 8)}%`,
+                                top: `${20 + (i % 4) * 20}%`,
+                            }}
+                            animate={{
+                                y: [0, -30, 0],
+                                x: [0, i % 2 === 0 ? 20 : -20, 0],
+                                opacity: [0.3, 0.8, 0.3],
+                                scale: [1, 1.5, 1]
+                            }}
+                            transition={{
+                                duration: 4 + (i * 0.5),
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: i * 0.3
+                            }}
+                        />
+                    ))}
 
-                            <motion.div 
-                                variants={fadeInUp} 
-                                className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
-                            >
-                                <Button
-                                    asChild
-                                    className="bg-sky-500 hover:bg-sky-600 text-white px-10 py-6 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                    {/* Morphing Shape */}
+                    <motion.div
+                        className="absolute right-[5%] top-1/2 -translate-y-1/2 w-64 h-64 md:w-96 md:h-96"
+                        animate={{
+                            borderRadius: [
+                                "60% 40% 30% 70% / 60% 30% 70% 40%",
+                                "30% 60% 70% 40% / 50% 60% 30% 60%",
+                                "60% 40% 30% 70% / 60% 30% 70% 40%"
+                            ],
+                            rotate: [0, 360]
+                        }}
+                        transition={{
+                            borderRadius: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+                            rotate: { duration: 30, repeat: Infinity, ease: "linear" }
+                        }}
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(14, 165, 233, 0.1))',
+                            border: '1px solid rgba(56, 189, 248, 0.2)',
+                            backdropFilter: 'blur(8px)'
+                        }}
+                    />
+
+                    <div className="max-w-6xl mx-auto relative z-10">
+                        <div className="grid lg:grid-cols-2 gap-12 items-center">
+                            {/* Content Side */}
+                            <motion.div variants={staggerContainer} className="space-y-8">
+                                {cta.badge && (
+                                    <motion.div 
+                                        variants={fadeIn}
+                                        whileHover={{ scale: 1.05 }}
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-sky-500/20 to-cyan-500/20 backdrop-blur-md rounded-full border border-sky-400/30"
+                                    >
+                                        <motion.span 
+                                            className="w-2 h-2 bg-sky-400 rounded-full"
+                                            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        />
+                                        <span className="text-sky-300 font-semibold text-sm uppercase tracking-wider">
+                                            {cta.badge}
+                                        </span>
+                                    </motion.div>
+                                )}
+
+                                <motion.h2 
+                                    variants={fadeInUp} 
+                                    className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
                                 >
-                                    <Link href={cta.primaryButtonLink || "/contact"}>
-                                        {cta.primaryButtonText}
-                                        <ArrowRight className="ml-2 w-5 h-5" />
-                                    </Link>
-                                </Button>
-                                <Button
-                                    asChild
-                                    variant="outline"
-                                    className="border-2 border-sky-400 text-sky-700 hover:bg-sky-50 px-10 py-6 rounded-xl text-lg font-semibold transition-all"
+                                    <span className="bg-gradient-to-r from-white via-sky-200 to-white bg-clip-text text-transparent">
+                                        {cta.title}
+                                    </span>
+                                </motion.h2>
+
+                                {cta.description && (
+                                    <motion.p 
+                                        variants={fadeInUp} 
+                                        className="text-xl text-sky-100/80 leading-relaxed max-w-xl"
+                                    >
+                                        {cta.description}
+                                    </motion.p>
+                                )}
+
+                                {/* Premium CTA Buttons */}
+                                <motion.div 
+                                    variants={fadeInUp} 
+                                    className="flex flex-col sm:flex-row gap-4 pt-4"
                                 >
-                                    <Link href={cta.secondaryButtonLink || "/services"}>
-                                        {cta.secondaryButtonText}
-                                    </Link>
-                                </Button>
+                                    <motion.div
+                                        whileHover={{ scale: 1.05, y: -4 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        <Link
+                                            href={cta.primaryButtonLink || "/contact"}
+                                            className="group relative px-8 py-5 bg-gradient-to-r from-sky-400 via-sky-500 to-cyan-500 text-white rounded-2xl shadow-2xl shadow-sky-500/30 hover:shadow-sky-500/50 transition-all duration-300 flex items-center gap-3 font-bold text-lg overflow-hidden"
+                                        >
+                                            {/* Shimmer effect */}
+                                            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                                            {/* Glow ring */}
+                                            <span className="absolute inset-0 rounded-2xl ring-2 ring-sky-300/50 group-hover:ring-sky-300/80 transition-all" />
+                                            
+                                            <span className="relative z-10">{cta.primaryButtonText}</span>
+                                            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-2 transition-transform duration-300" />
+                                        </Link>
+                                    </motion.div>
+
+                                    <motion.div
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        <Link
+                                            href={cta.secondaryButtonLink || "/services"}
+                                            className="px-8 py-5 bg-white/5 backdrop-blur-md text-white border border-white/20 rounded-2xl hover:bg-white/10 hover:border-sky-400/50 transition-all duration-300 flex items-center gap-2 font-semibold text-lg"
+                                        >
+                                            <span>{cta.secondaryButtonText}</span>
+                                        </Link>
+                                    </motion.div>
+                                </motion.div>
+
+                                {/* Contact Info with Glowing Icons */}
+                                {cta.contactInfo && (
+                                    <motion.div 
+                                        variants={fadeIn} 
+                                        className="pt-6 flex flex-wrap gap-6"
+                                    >
+                                        {cta.contactInfo.map((info: any, index: number) => (
+                                            <motion.div
+                                                key={index}
+                                                whileHover={{ scale: 1.05, x: 5 }}
+                                                className="flex items-center gap-3 text-sky-200/80 hover:text-sky-100 transition-colors cursor-pointer"
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-sky-500/20 backdrop-blur flex items-center justify-center border border-sky-400/30">
+                                                    {info.text.includes('Hotline') && <Phone className="w-4 h-4 text-sky-400" />}
+                                                    {info.text.includes('@') && <Mail className="w-4 h-4 text-sky-400" />}
+                                                </div>
+                                                <span className="font-medium">{info.text}</span>
+                                            </motion.div>
+                                        ))}
+                                    </motion.div>
+                                )}
                             </motion.div>
 
-                            {/* Contact Info */}
-                            {cta.contactInfo && (
-                                <motion.div 
-                                    variants={fadeIn} 
-                                    className="flex flex-wrap justify-center gap-6 text-slate-600"
+                            {/* Visual Side - Interactive Stats Cards */}
+                            <motion.div 
+                                variants={scaleIn}
+                                className="relative hidden lg:block"
+                            >
+                                {/* Central Glowing Circle */}
+                                <motion.div
+                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                                 >
-                                    {cta.contactInfo.map((info: any, index: number) => (
-                                        <span key={index} className="flex items-center gap-2">
-                                            {info.text.includes('Hotline') && <Phone className="w-4 h-4 text-sky-500" />}
-                                            {info.text.includes('@') && <Mail className="w-4 h-4 text-sky-500" />}
-                                            {info.text}
-                                        </span>
-                                    ))}
+                                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-sky-400/30" />
                                 </motion.div>
-                            )}
-                        </motion.div>
+
+                                {/* Floating Stats Cards */}
+                                <motion.div
+                                    animate={{ y: [0, -15, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                    className="absolute top-0 left-1/2 -translate-x-1/2 bg-gradient-to-br from-sky-500/20 to-sky-600/10 backdrop-blur-xl p-6 rounded-2xl border border-sky-400/30 shadow-2xl"
+                                >
+                                    <div className="text-center">
+                                        <p className="text-4xl font-bold text-white mb-1">15,000+</p>
+                                        <p className="text-sky-300 text-sm">Happy Patients</p>
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{ y: [0, 12, 0] }}
+                                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                    className="absolute bottom-8 left-8 bg-gradient-to-br from-cyan-500/20 to-sky-600/10 backdrop-blur-xl p-6 rounded-2xl border border-cyan-400/30 shadow-2xl"
+                                >
+                                    <div className="text-center">
+                                        <div className="flex items-center justify-center gap-1 mb-1">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                            ))}
+                                        </div>
+                                        <p className="text-3xl font-bold text-white mb-1">4.9/5</p>
+                                        <p className="text-cyan-300 text-sm">Patient Rating</p>
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{ y: [0, -10, 0] }}
+                                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                    className="absolute bottom-20 right-0 bg-gradient-to-br from-blue-500/20 to-sky-600/10 backdrop-blur-xl p-6 rounded-2xl border border-blue-400/30 shadow-2xl"
+                                >
+                                    <div className="text-center">
+                                        <p className="text-4xl font-bold text-white mb-1">50+</p>
+                                        <p className="text-blue-300 text-sm">Countries Served</p>
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{ y: [0, 8, 0] }}
+                                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                                    className="absolute top-1/3 right-4 bg-gradient-to-br from-sky-400/20 to-cyan-500/10 backdrop-blur-xl p-6 rounded-2xl border border-sky-300/30 shadow-2xl"
+                                >
+                                    <div className="text-center">
+                                        <p className="text-4xl font-bold text-white mb-1">98%</p>
+                                        <p className="text-sky-200 text-sm">Satisfaction Rate</p>
+                                    </div>
+                                </motion.div>
+
+                                {/* Connecting Lines Animation */}
+                                <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minHeight: '400px' }}>
+                                    <motion.line
+                                        x1="50%" y1="20%" x2="80%" y2="40%"
+                                        stroke="rgba(56, 189, 248, 0.2)"
+                                        strokeWidth="1"
+                                        strokeDasharray="5,5"
+                                        animate={{ strokeDashoffset: [0, 20] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                    />
+                                    <motion.line
+                                        x1="50%" y1="20%" x2="20%" y2="70%"
+                                        stroke="rgba(56, 189, 248, 0.2)"
+                                        strokeWidth="1"
+                                        strokeDasharray="5,5"
+                                        animate={{ strokeDashoffset: [0, 20] }}
+                                        transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                                    />
+                                    <motion.line
+                                        x1="80%" y1="40%" x2="75%" y2="70%"
+                                        stroke="rgba(56, 189, 248, 0.2)"
+                                        strokeWidth="1"
+                                        strokeDasharray="5,5"
+                                        animate={{ strokeDashoffset: [0, 20] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                    />
+                                </svg>
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Bottom Wave Decoration */}
+                    <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden">
+                        <motion.div
+                            className="absolute bottom-0 left-0 right-0 h-full"
+                            animate={{ x: [0, -100, 0] }}
+                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            style={{
+                                background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='rgba(56,189,248,0.1)' d='M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60 L1200,120 L0,120 Z'/%3E%3C/svg%3E")`,
+                                backgroundSize: '1200px 120px',
+                                backgroundRepeat: 'repeat-x'
+                            }}
+                        />
                     </div>
                 </motion.section>
             )}
