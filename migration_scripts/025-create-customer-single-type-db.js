@@ -19,17 +19,15 @@ const { Client } = require("pg");
 const axios = require("axios");
 const https = require("https");
 
-const STRAPI_URL =
-  process.env.STRAPI_URL || "https://pediatric-expired-through-casinos.trycloudflare.com";
-const API_TOKEN =
-  process.env.STRAPI_API_TOKEN || "7f399a0c6012eb5520522f741cfc8ea0f3c5d3b32c5f1d08566bd951013faca178f9f8303403de061571bbee3edcad872b0b595a58a1892617c59f484605ecfcf3e7cdfe38de7322730eba6a32826aeab5d4ed8724f93330f0f28dd3963e83c291fd51df8b8dc9d6b43d06c7295861280d448b8d26e15064cc5dc02e242814f9";
+const STRAPI_URL = "https://pediatric-expired-through-casinos.trycloudflare.com";
+const API_TOKEN = "7f399a0c6012eb5520522f741cfc8ea0f3c5d3b32c5f1d08566bd951013faca178f9f8303403de061571bbee3edcad872b0b595a58a1892617c59f484605ecfcf3e7cdfe38de7322730eba6a32826aeab5d4ed8724f93330f0f28dd3963e83c291fd51df8b8dc9d6b43d06c7295861280d448b8d26e15064cc5dc02e242814f9";
 
 const DB_CONFIG = {
-  host: process.env.DB_HOST || "100.68.50.41",
-  port: parseInt(process.env.DB_PORT || "5437"),
-  database: process.env.DB_NAME || "dental_cms_strapi",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
+  host: "100.68.50.41",
+  port: 5437,
+  database: "dental_cms_strapi",
+  user: "postgres",
+  password: "postgres",
 };
 
 const axiosInstance = axios.create({

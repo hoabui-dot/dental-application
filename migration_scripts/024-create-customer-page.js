@@ -16,11 +16,11 @@
 const { Client } = require("pg");
 
 const client = new Client({
-  host: process.env.DB_HOST || "100.68.50.41",
-  port: process.env.DB_PORT || 5437,
-  database: process.env.DB_NAME || "dental_cms_strapi",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
+  host: "100.68.50.41",
+  port: 5437,
+  database: "dental_cms_strapi",
+  user: "postgres",
+  password: "postgres",
 });
 
 const customerPageData = {
