@@ -93,6 +93,8 @@ export function CustomerContent({ content, page }: CustomerContentProps) {
     const getImageUrl = (image: any) => {
         if (!image) return null
         if (image.type === 'strapi' && image.path) {
+            // If path is already an absolute URL, return it directly
+            if (image.path.startsWith('http')) return image.path
             return `${STRAPI_URL}${image.path}`
         }
         return image.url || null

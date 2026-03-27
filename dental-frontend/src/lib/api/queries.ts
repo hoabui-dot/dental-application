@@ -726,7 +726,7 @@ export async function getCustomersPage(): Promise<{
     const customerResponse = await apiClient<any>("/api/customer", {
       params: {
         "populate[layout][populate]": "*",
-        "populate[layout][on][customer.hero][populate]": "*",
+        "populate[layout][on][customer.hero][populate]": "image1,image2,image3,image4",
         "populate[layout][on][customer.success-stories][populate][stories][populate]": "*",
         "populate[layout][on][customer.benefits][populate][benefits][populate]": "*",
         "populate[layout][on][customer.statistics][populate][stats][populate]": "*",
@@ -820,8 +820,21 @@ function transformCustomersLayoutToContent(layout: any[]): any {
           title: component.title,
           subtitle: component.subtitle,
           description: component.description,
-          // images is a JSON field in the schema (array of {type, path, alt})
-          images: component.images || [],
+          // Convert separate image fields back to the array format expected by the frontend
+          images: [
+            component.image1,
+            component.image2,
+            component.image3,
+            component.image4
+          ].map(img => {
+            if (!img) return null;
+            return {
+              type: "strapi",
+              // Handle Strapi 5 media structure: img.url might be relative or absolute
+              path: img.url,
+              alt: img.alternativeText || img.name || "Customer Image"
+            };
+          }).filter(Boolean),
         };
         break;
 
